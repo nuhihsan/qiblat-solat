@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Solat">
+<meta name="apple-mobile-web-app-title" content="Prayer">
 <meta name="theme-color" content="#0b1f1a">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230b1f1a'/%3E%3Cpath d='M112 40a52 52 0 1 0 0 100a42 42 0 1 1 0-100z' fill='%23e8c66a'/%3E%3Ccircle cx='120' cy='72' r='9' fill='%23e8c66a'/%3E%3C/svg%3E">
-<title>Waktu Solat & Kiblat</title>
+<title>Prayer Times & Qibla</title>
 <style>
   :root{--bg:#0b1f1a;--card:#12302a;--line:#1f4a40;--txt:#eef5f2;--mut:#9fbdb4;--acc:#e8c66a;--ok:#5fd39a}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -38,7 +38,7 @@
   .tabs button{flex:1}
   .tabs button.on{background:var(--acc);color:#1b1404}
   .compass{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:8px auto 12px}
-  .rose{position:absolute;inset:0;transition:transform .15s linear}
+  .rose{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%}
   .fixed{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:16px solid var(--txt);z-index:2}
   .qinfo{text-align:center}
   .qdeg{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -55,23 +55,23 @@
 <div class="wrap">
   <header>
     <div>
-      <h1>WAKTU SOLAT & KIBLAT</h1>
-      <div class="loc" id="loc">Mencari lokasi…</div>
+      <h1>PRAYER TIMES & QIBLA</h1>
+      <div class="loc" id="loc">Finding your location…</div>
       <div class="sub" id="date"></div>
     </div>
-    <button id="refresh" aria-label="Kemas kini lokasi">↻</button>
+    <button id="refresh" aria-label="Refresh location">↻</button>
   </header>
 
   <div class="card err hide" id="err"></div>
 
   <div class="tabs">
-    <button class="on" data-tab="solat">Waktu Solat</button>
-    <button data-tab="kiblat">Kiblat</button>
+    <button class="on" data-tab="solat">Prayer Times</button>
+    <button data-tab="kiblat">Qibla</button>
   </div>
 
   <section id="tab-solat">
     <div class="card next">
-      <div class="lbl">Waktu seterusnya</div>
+      <div class="lbl">Next prayer</div>
       <div class="name" id="nextName">–</div>
       <div class="cd" id="nextCd">--:--:--</div>
       <div class="at" id="nextAt"></div>
@@ -87,10 +87,10 @@
         <svg class="rose" id="rose" viewBox="0 0 300 300">
           <circle cx="150" cy="150" r="142" fill="none" stroke="#1f4a40" stroke-width="10"/>
           <g id="ticks"></g>
-          <text x="150" y="40" text-anchor="middle" fill="#ff7a7a" font-size="22" font-weight="800">U</text>
-          <text x="265" y="158" text-anchor="middle" fill="#9fbdb4" font-size="18" font-weight="700">T</text>
+          <text x="150" y="40" text-anchor="middle" fill="#ff7a7a" font-size="22" font-weight="800">N</text>
+          <text x="265" y="158" text-anchor="middle" fill="#9fbdb4" font-size="18" font-weight="700">E</text>
           <text x="150" y="275" text-anchor="middle" fill="#9fbdb4" font-size="18" font-weight="700">S</text>
-          <text x="35" y="158" text-anchor="middle" fill="#9fbdb4" font-size="18" font-weight="700">B</text>
+          <text x="35" y="158" text-anchor="middle" fill="#9fbdb4" font-size="18" font-weight="700">W</text>
           <g id="needle">
             <line x1="150" y1="150" x2="150" y2="44" stroke="#e8c66a" stroke-width="6" stroke-linecap="round"/>
             <rect x="136" y="30" width="28" height="28" rx="4" fill="#111" stroke="#e8c66a" stroke-width="3"/>
@@ -101,11 +101,11 @@
       </div>
       <div class="qinfo">
         <div class="qdeg" id="qdeg">–°</div>
-        <div class="sub">arah kiblat dari Utara</div>
+        <div class="sub">Qibla bearing from North</div>
         <div class="status" id="qstatus"></div>
-        <button class="pri" id="compassBtn" style="margin-top:12px">Aktifkan kompas</button>
+        <button class="pri" id="compassBtn" style="margin-top:12px">Enable compass</button>
       </div>
-      <p class="note">Pegang telefon rata (mendatar). Pusing badan sehingga ikon Kaabah berada di bawah anak panah putih di atas. Jika arah tidak stabil, jauhkan dari besi/elektronik dan gerakkan telefon dalam bentuk angka 8 untuk kalibrasi.</p>
+      <p class="note">Hold your phone flat. Turn until the Kaaba icon sits under the white arrow at the top. If the reading jumps around, move away from metal and electronics and wave the phone in a figure 8 to calibrate.</p>
     </div>
   </section>
 </div>
@@ -115,8 +115,8 @@
   const KAABA = { lat: 21.4225, lng: 39.8262 };
   const TZ = 'Asia/Kuala_Lumpur';
   const NAMES = [
-    ['fajr','Subuh'],['syuruk','Syuruk'],['dhuhr','Zohor'],
-    ['asr','Asar'],['maghrib','Maghrib'],['isha','Isyak']
+    ['fajr','Fajr'],['syuruk','Sunrise'],['dhuhr','Dhuhr'],
+    ['asr','Asr'],['maghrib','Maghrib'],['isha','Isha']
   ];
   const $ = id => document.getElementById(id);
   const store = {
@@ -129,7 +129,7 @@
   let qibla = null;
 
   // ---------- helpers ----------
-  const fmt = d => d.toLocaleTimeString('ms-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ});
+  const fmt = d => d.toLocaleTimeString('en-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ});
   const myParts = (d=new Date()) => {
     const p = new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);
     const g = t => +p.find(x=>x.type===t).value;
@@ -239,7 +239,7 @@
     });
     let target, name;
     if(nextKey){ target=today[nextKey]; name=NAMES.find(n=>n[0]===nextKey)[1]; }
-    else { target=tomorrowFajr; name='Subuh (esok)'; }
+    else { target=tomorrowFajr; name='Fajr (tomorrow)'; }
     $('nextName').textContent=name;
     $('nextAt').textContent=target?fmt(target):'';
     if(target){
@@ -249,9 +249,11 @@
       if(s===0) setTimeout(()=>start(true), 1500);
     }
   }
+  const HIJRI_M=['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
+  function fmtHijri(h){ const m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(h); return m ? `${+m[3]} ${HIJRI_M[+m[2]-1]} ${m[1]} AH` : h; }
   function setDateLine(hijri){
-    const g = new Date().toLocaleDateString('ms-MY',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:TZ});
-    $('date').textContent = hijri ? `${g} · ${hijri}` : g;
+    const g = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:TZ});
+    $('date').textContent = hijri ? `${g} · ${fmtHijri(hijri)}` : g;
   }
 
   // ---------- main flow ----------
@@ -264,15 +266,15 @@
 
   async function start(){
     clearErr();
-    $('loc').textContent='Mencari lokasi…';
+    $('loc').textContent='Finding your location…';
     let lat,lng;
     try{
       const c = await getPosition(); lat=c.latitude; lng=c.longitude;
       store.set('pos',{lat,lng});
     }catch(e){
       const p = store.get('pos');
-      if(p){ lat=p.lat; lng=p.lng; showErr('Lokasi semasa tidak dapat dibaca. Menggunakan lokasi terakhir. Pastikan Location Services dibenarkan untuk Safari.'); }
-      else { $('loc').textContent='Lokasi tidak tersedia'; showErr('Sila benarkan akses lokasi: Settings > Privacy & Security > Location Services > Safari Websites > While Using.'); return; }
+      if(p){ lat=p.lat; lng=p.lng; showErr('Could not read your current location, so the last known location is used. Check that Location Services is allowed for Safari.'); }
+      else { $('loc').textContent='Location unavailable'; showErr('Please allow location access: Settings > Privacy & Security > Location Services > Safari Websites > While Using the App.'); return; }
     }
 
     qibla = qiblaBearing(lat,lng);
@@ -284,12 +286,12 @@
     let source='', data=null;
     try{
       data = await loadFromApi(lat,lng);
-      source = `Sumber: JAKIM e-Solat (zon ${data.zone}) via waktusolat.app`;
+      source = `Source: JAKIM e-Solat (zone ${data.zone}) via waktusolat.app`;
     }catch(e){
       const last = store.get('last');
       if(last && last.y===y && last.m===m){
         data = store.get(`month:${last.zone}:${y}-${m}`);
-        if(data) source = `Sumber: JAKIM (zon ${data.zone}, simpanan luar talian)`;
+        if(data) source = `Source: JAKIM (zone ${data.zone}, saved offline copy)`;
       }
     }
 
@@ -299,11 +301,11 @@
       tomorrowFajr = nextDay ? nextDay.fajr : calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr;
       setDateLine(today.hijri);
       const name = await getZoneName(data.zone);
-      $('loc').textContent = name || `Zon ${data.zone}`;
+      $('loc').textContent = name || `Zone ${data.zone}`;
     }else{
       today = calcTimes(y,m,d,lat,lng);
       tomorrowFajr = calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr;
-      source = 'Anggaran kiraan (tiada internet). Mungkin berbeza ±1 hingga 2 minit dari JAKIM.';
+      source = 'Estimated by calculation (no internet). May differ from JAKIM by a few minutes.';
       setDateLine('');
       $('loc').textContent = `${lat.toFixed(3)}, ${lng.toFixed(3)}`;
     }
@@ -311,34 +313,51 @@
     render();
   }
 
-  // ---------- compass ----------
-  let heading=null;
+  // ---------- compass (smoothed with requestAnimationFrame) ----------
+  let heading=null;      // latest raw sensor heading
+  let shown=null;        // smoothed, unwrapped angle currently drawn
+  let aligned=false, lastText='';
+  const rose=$('rose');
+  const wrap180 = a => ((a % 360) + 540) % 360 - 180;
   function onOrient(e){
     let h = null;
     if(typeof e.webkitCompassHeading==='number') h = e.webkitCompassHeading;           // iOS
     else if(e.absolute && typeof e.alpha==='number') h = (360 - e.alpha)%360;           // Android
-    if(h==null) return;
+    if(h==null || isNaN(h)) return;
     heading = h;
-    $('rose').style.transform = `rotate(${-h}deg)`;
+  }
+  let lastFrame=0;
+  function frame(ts){
+    requestAnimationFrame(frame);
+    if(heading==null) return;
+    const dt = lastFrame ? Math.min(100, ts-lastFrame) : 16; lastFrame = ts;
+    if(shown==null) shown = heading;
+    const diff = wrap180(heading - shown);
+    if(Math.abs(diff) > 0.15){
+      const k = 1 - Math.exp(-dt/90);   // ~90ms time constant: smooth but responsive
+      shown += diff * k;
+      rose.style.transform = `rotate(${-shown}deg)`;
+    }
     if(qibla!=null){
-      let diff = ((qibla - h + 540)%360)-180;
-      const st=$('qstatus');
-      if(Math.abs(diff)<=3){ st.textContent='✓ Anda menghadap kiblat'; st.className='status ok'; }
-      else { st.textContent = `Pusing ${diff>0?'ke kanan':'ke kiri'} ${Math.abs(diff).toFixed(0)}°`; st.className='status'; }
+      const off = wrap180(qibla - shown);
+      if(aligned ? Math.abs(off) > 5 : Math.abs(off) <= 3) aligned = !aligned;
+      const txt = aligned ? '✓ You are facing the Qibla' : `Turn ${off>0?'right':'left'} ${Math.round(Math.abs(off))}°`;
+      if(txt!==lastText){ const st=$('qstatus'); st.textContent=txt; st.className= aligned?'status ok':'status'; lastText=txt; }
     }
   }
   async function enableCompass(){
     try{
       if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
         const p = await DeviceOrientationEvent.requestPermission();
-        if(p!=='granted'){ $('qstatus').textContent='Akses kompas ditolak. Tutup & buka semula app untuk cuba lagi.'; return; }
+        if(p!=='granted'){ $('qstatus').textContent='Compass access denied. Close and reopen the app to try again.'; return; }
       }
-      window.addEventListener('deviceorientationabsolute', onOrient, true);
-      window.addEventListener('deviceorientation', onOrient, true);
+      if('ondeviceorientationabsolute' in window) window.addEventListener('deviceorientationabsolute', onOrient, true);
+      else window.addEventListener('deviceorientation', onOrient, true);
       $('compassBtn').classList.add('hide');
-      $('qstatus').textContent='Menunggu bacaan kompas…';
-      setTimeout(()=>{ if(heading==null) $('qstatus').textContent='Kompas tidak dikesan pada peranti ini. Gunakan darjah di atas dengan kompas fizikal.'; },3000);
-    }catch(e){ $('qstatus').textContent='Kompas tidak dapat diaktifkan.'; }
+      $('qstatus').textContent='Waiting for compass reading…';
+      requestAnimationFrame(frame);
+      setTimeout(()=>{ if(heading==null) $('qstatus').textContent='No compass detected on this device. Use the bearing above with a physical compass.'; },3000);
+    }catch(e){ $('qstatus').textContent='Could not enable the compass.'; }
   }
 
   // ticks
