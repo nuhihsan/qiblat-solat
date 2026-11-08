@@ -30,7 +30,7 @@
   .next{text-align:center}
   .next .lbl{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
   .next .name{font-size:28px;font-weight:800;margin-top:4px;color:var(--acc)}
-  .next .cd{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+  .next .cd{font-size:38px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
   .next .at{font-size:14px;color:var(--mut);margin-top:2px}
   .times{list-style:none}
   .times li{display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line);font-size:17px}
@@ -117,7 +117,7 @@
         <thead><tr><th>Date</th><th>Fajr</th><th>Rise</th><th>Dhuhr</th><th>Asr</th><th>Mgrb</th><th>Isha</th></tr></thead>
         <tbody id="mBody"></tbody>
       </table>
-      <p class="note">Times in 12-hour format. Dhuhr to Isha are afternoon and evening. Fridays are in green.</p>
+      <p class="note">Times in 24-hour format. Fridays are in green.</p>
     </div>
   </section>
 
@@ -171,7 +171,7 @@
 
   // ---------- helpers ----------
   const fmt = d => d.toLocaleTimeString('en-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ});
-  const fmtShort = d => d.toLocaleTimeString('en-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ}).replace(/\s?[ap]\.?m\.?/i,'');
+  const fmtShort = d => d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:TZ});
   const addMin = (d,m) => new Date(d.getTime()+m*60000);
   const myParts = (d=new Date()) => {
     const p = new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);
@@ -293,10 +293,11 @@
     if(nextKey){ target=today[nextKey]; name=MAIN.find(n=>n[0]===nextKey)[1]; }
     else { target=tomorrowFajr; name='Fajr (tomorrow)'; }
     $('nextName').textContent=name;
-    $('nextAt').textContent=target?fmt(target):'';
+    $('nextAt').textContent=target?`left until ${name.replace(' (tomorrow)','')} at ${fmt(target)}`:'';
     if(target){
       const s=Math.max(0,Math.floor((target-now)/1000));
-      $('nextCd').textContent=[Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(v=>String(v).padStart(2,'0')).join(':');
+      const hh=Math.floor(s/3600), mm=Math.floor(s%3600/60), ss=s%60;
+      $('nextCd').textContent = hh ? `${hh}h ${String(mm).padStart(2,'0')}m ${String(ss).padStart(2,'0')}s` : `${mm}m ${String(ss).padStart(2,'0')}s`;
       if(s===0) setTimeout(()=>start(), 1500);
     }
   }
