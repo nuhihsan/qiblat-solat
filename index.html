@@ -42,7 +42,7 @@
   .times li.extra .t{font-weight:600}
   .times li.extra small{font-size:11px;opacity:.8;margin-left:6px}
   .tabs{display:flex;gap:8px;margin-bottom:14px}
-  .tabs button{flex:1;padding:10px 6px}
+  .tabs button{flex:1;padding:10px 4px;font-size:15px}
   .tabs button.on{background:var(--acc);color:#1b1404}
   .compass{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:8px auto 12px}
   .rose{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%}
@@ -65,6 +65,29 @@
   td:first-child{text-align:left;font-weight:700;padding-left:4px}
   tr.today td{background:#2a4a33;color:var(--acc);font-weight:700}
   tr.fri td:first-child{color:var(--ok)}
+  .ram{background:linear-gradient(135deg,#2a2410,#12302a);border-color:#5a4a1a;text-align:center}
+  .ram .lbl{font-size:13px;color:var(--acc);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+  .ram .big{font-size:30px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+  .ram .sm{font-size:14px;color:var(--mut);margin-top:2px}
+  .ram .pair{display:flex;gap:10px;margin-top:12px}
+  .ram .pair div{flex:1;background:#0b1f1a80;border-radius:12px;padding:8px}
+  .ram .pair b{display:block;font-size:18px}
+  .share{width:100%;margin-bottom:14px}
+  .ev{list-style:none}
+  .ev li{display:flex;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line)}
+  .ev li:last-child{border-bottom:0}
+  .ev .d{width:52px;text-align:center;flex-shrink:0;background:var(--line);border-radius:12px;padding:6px 0}
+  .ev .d b{display:block;font-size:20px;line-height:1.1}
+  .ev .d span{font-size:11px;color:var(--mut);text-transform:uppercase}
+  .ev .i{flex:1;min-width:0}
+  .ev .i b{font-size:16px}
+  .ev .i div{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.4}
+  .ev .c{font-size:12px;font-weight:700;color:var(--acc);text-align:right;flex-shrink:0}
+  .ev li.past{opacity:.45}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-right:4px;background:#2a4a33;color:var(--ok)}
+  .tag.obs{background:#33301a;color:var(--acc)}
+  .yr{font-size:13px;color:var(--mut);font-weight:700;letter-spacing:1px;margin:10px 0 2px}
+  .vh{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden}
   .zone label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px}
   .zone .row{display:flex;gap:8px;margin-top:10px}
   .zone .row button{flex:1}
@@ -98,9 +121,16 @@
     <button class="on" data-tab="today">Today</button>
     <button data-tab="month">Month</button>
     <button data-tab="qibla">Qibla</button>
+    <button data-tab="events">Events</button>
   </div>
 
   <section id="tab-today">
+    <div class="card ram hide" id="ram">
+      <div class="lbl" id="ramDay">Ramadan</div>
+      <div class="big" id="ramCd">–</div>
+      <div class="sm" id="ramSub"></div>
+      <div class="pair"><div><span class="sub">Sahur ends (Imsak)</span><b id="ramImsak">–</b></div><div><span class="sub">Iftar (Maghrib)</span><b id="ramIftar">–</b></div></div>
+    </div>
     <div class="card next">
       <div class="lbl">Next prayer</div>
       <div class="name" id="nextName">–</div>
@@ -108,6 +138,7 @@
       <div class="at" id="nextAt"></div>
     </div>
     <div class="card"><ul class="times" id="times"></ul></div>
+    <button class="share" id="shareBtn">Share today's times</button>
     <div class="src" id="src"></div>
   </section>
 
@@ -119,6 +150,15 @@
         <tbody id="mBody"></tbody>
       </table>
       <p class="note">Times in 24-hour format. Fridays are in green.</p>
+    </div>
+  </section>
+
+  <section id="tab-events" class="hide">
+    <div class="card">
+      <div class="mhead"><b>Islamic occasions</b><span class="sub">Malaysia</span></div>
+      <div id="evList"></div>
+      <a href="webcal://nuhihsan.github.io/qiblat-solat/islamic-events.ics" style="text-decoration:none"><button class="pri" style="width:100%;margin-top:12px">Add all to iPhone Calendar</button></a>
+      <p class="note"><span class="tag">Holiday</span> federal or state public holiday, per the government's gazetted list. <span class="tag obs">Observance</span> estimated from the Hijri calendar and may shift by a day. All Islamic dates depend on JAKIM's moon sighting and can change.</p>
     </div>
   </section>
 
@@ -146,6 +186,7 @@
         <div class="sub">Qibla bearing from North</div>
         <div class="status" id="qstatus"></div>
         <div class="acc hide" id="acc"></div>
+        <label class="vh" id="hapLbl"><input type="checkbox" switch id="hapSw"></label>
         <div><button class="pri" id="compassBtn" style="margin-top:12px">Enable compass</button></div>
       </div>
       <p class="note">Hold your phone flat. Turn until the Kaaba icon sits under the white arrow at the top. If accuracy shows Low, move away from metal and electronics and wave the phone in a figure 8 a few times.</p>
@@ -168,7 +209,7 @@
     set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
   };
 
-  let today=null, tomorrowFajr=null, qibla=null, monthRows=[], monthMeta={};
+  let today=null, tomorrow=null, tomorrowFajr=null, qibla=null, monthRows=[], monthMeta={};
 
   // ---------- helpers ----------
   const fmt = d => d.toLocaleTimeString('en-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ});
@@ -315,6 +356,85 @@
     }
   }
 
+  // ---------- Ramadan mode ----------
+  const FORCE_RAMADAN = /[?&]ramadan=1/.test(location.search);
+  function hijriParts(){
+    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec((today && today.hijri) || '');
+    if(m) return {y:+m[1], m:+m[2], d:+m[3]};
+    try{ const p=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'numeric',year:'numeric',timeZone:TZ}).formatToParts(new Date());
+         const g=t=>parseInt(p.find(x=>x.type===t).value); return {y:g('year'),m:g('month'),d:g('day')}; }catch(e){ return null; }
+  }
+  const hms = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return h ? `${h}h ${String(m).padStart(2,'0')}m ${String(x).padStart(2,'0')}s` : `${m}m ${String(x).padStart(2,'0')}s`; };
+  function renderRamadan(){
+    const h = hijriParts(); const box=$('ram');
+    if(!today || !(FORCE_RAMADAN || (h && h.m===9))){ box.classList.add('hide'); return; }
+    box.classList.remove('hide');
+    const now=new Date();
+    const imsak = today.imsak || addMin(today.fajr,-IMSAK_MIN);
+    $('ramDay').textContent = h && h.m===9 ? `Ramadan · Day ${h.d}` : 'Ramadan (preview)';
+    let target, sub;
+    if(now < imsak){ target=imsak; sub=`until Sahur ends at ${fmt(imsak)}`; }
+    else if(now < today.maghrib){ target=today.maghrib; sub=`until Iftar at ${fmt(today.maghrib)}`; }
+    else { const ti = tomorrow ? (tomorrow.imsak || addMin(tomorrow.fajr,-IMSAK_MIN)) : null; target=ti; sub = ti ? `until Sahur ends tomorrow at ${fmt(ti)}` : 'Fast complete for today'; }
+    $('ramCd').textContent = target ? hms(Math.max(0,Math.floor((target-now)/1000))) : 'Alhamdulillah';
+    $('ramSub').textContent = sub;
+    $('ramImsak').textContent = fmt(imsak);
+    $('ramIftar').textContent = fmt(today.maghrib);
+  }
+
+  // ---------- Islamic occasions (Malaysia) ----------
+  // type: 'hol' = gazetted public holiday (federal or state); 'obs' = observance, estimated from the Hijri calendar
+  const EVENTS = [
+    ['2026-12-11','Awal Rejab','1 Rejab 1448','obs','Start of the sacred month of Rejab'],
+    ['2027-01-06','Israk & Mikraj','27 Rejab 1448','hol','State holiday: Kedah, Negeri Sembilan, Perlis, Terengganu'],
+    ['2027-01-23','Nisfu Syaaban','15 Syaaban 1448','obs','Night of mid-Syaaban (evening before)'],
+    ['2027-02-08','Awal Ramadan','1 Ramadan 1448','hol','First day of fasting. State holiday: Johor, Kedah, Melaka'],
+    ['2027-02-24','Nuzul Al-Quran','17 Ramadan 1448','hol','State holiday in most states, not Johor, Kedah, Melaka, N. Sembilan, Sabah, Sarawak'],
+    ['2027-02-28','Last 10 nights of Ramadan','21 Ramadan 1448','obs','Seek Lailatul Qadar'],
+    ['2027-03-10','Hari Raya Aidilfitri','1 Syawal 1448','hol','National holiday (Day 1)'],
+    ['2027-03-11','Hari Raya Aidilfitri (Day 2)','2 Syawal 1448','hol','National holiday'],
+    ['2027-05-16','Hari Arafah','9 Zulhijjah 1448','hol','Recommended day of fasting. State holiday: Kelantan, Terengganu'],
+    ['2027-05-17','Hari Raya Aidiladha (Haji)','10 Zulhijjah 1448','hol','National holiday'],
+    ['2027-05-18','Hari Raya Aidiladha (Day 2)','11 Zulhijjah 1448','hol','State holiday: Kedah, Kelantan, Perlis, Terengganu'],
+    ['2027-06-06','Awal Muharram (Maal Hijrah)','1 Muharram 1449','hol','National holiday. Islamic New Year 1449'],
+    ['2027-06-15','Hari Asyura','10 Muharram 1449','obs','Recommended day of fasting (with 9 Muharram)'],
+    ['2027-08-15','Maulidur Rasul','12 Rabiulawal 1449','hol','National holiday. Birthday of Prophet Muhammad SAW'],
+  ];
+  function renderEvents(){
+    const {y,m,d}=myParts(); const todayUTC=Date.UTC(y,m-1,d);
+    let html='', curYear=null;
+    EVENTS.forEach(([iso,name,hij,type,desc])=>{
+      const [ey,em,ed]=iso.split('-').map(Number); const t=Date.UTC(ey,em-1,ed);
+      const days=Math.round((t-todayUTC)/86400000);
+      if(days < -30) return;
+      if(ey!==curYear){ html+=`<div class="yr">${ey}</div><ul class="ev">`.replace(/^/, curYear?'</ul>':''); curYear=ey; }
+      const dt=new Date(t);
+      const mon=dt.toLocaleDateString('en-GB',{month:'short',timeZone:'UTC'}), wd=dt.toLocaleDateString('en-GB',{weekday:'short',timeZone:'UTC'});
+      const c = days===0?'Today':days===1?'Tomorrow':days>0?`in ${days} days`:'Passed';
+      html+=`<li class="${days<0?'past':''}"><div class="d"><b>${ed}</b><span>${mon}</span></div><div class="i"><b>${name}</b><div><span class="tag ${type==='obs'?'obs':''}">${type==='obs'?'Observance':'Holiday'}</span>${wd} · ${hij}</div><div>${desc}</div></div><div class="c">${c}</div></li>`;
+    });
+    $('evList').innerHTML = html + (curYear?'</ul>':'');
+  }
+
+  // ---------- share ----------
+  async function shareToday(){
+    if(!today) return;
+    const g = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:TZ});
+    const where = $('loc').textContent + ($('zline').textContent ? ` (${$('zline').textContent.split(' · ')[0]})` : '');
+    const L = [['Imsak',today.imsak||addMin(today.fajr,-IMSAK_MIN)],['Fajr',today.fajr],['Sunrise',today.syuruk],['Dhuhr',today.dhuhr],['Asr',today.asr],['Maghrib',today.maghrib],['Isha',today.isha]];
+    const text = `Prayer times for ${where}\n${g}${today.hijri?` · ${fmtHijri(today.hijri)}`:''}\n\n` + L.map(([n,t])=>`${n}: ${fmt(t)}`).join('\n') + `\n\nSource: JAKIM e-Solat`;
+    const btn=$('shareBtn');
+    try{
+      if(navigator.share){ await navigator.share({title:'Prayer times', text}); return; }
+      await navigator.clipboard.writeText(text); btn.textContent='Copied ✓';
+    }catch(e){
+      if(e && e.name==='AbortError') return;
+      try{ await navigator.clipboard.writeText(text); btn.textContent='Copied ✓'; }catch(_){ btn.textContent='Could not share'; }
+    }
+    setTimeout(()=>btn.textContent="Share today's times",2000);
+  }
+  $('shareBtn').addEventListener('click',shareToday);
+
   // ---------- render: month ----------
   function renderMonth(){
     const {y,m,d} = myParts();
@@ -387,7 +507,8 @@
     if(data && dayFromData(data,d)){
       today = dayFromData(data,d);
       const nd = (tm.m===m) ? dayFromData(data,tm.d) : null;
-      tomorrowFajr = nd ? nd.fajr : (lat!=null ? calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr : null);
+      tomorrow = nd || (lat!=null ? calcTimes(tm.y,tm.m,tm.d,lat,lng) : null);
+      tomorrowFajr = tomorrow ? tomorrow.fajr : null;
       monthRows = data.prayers.map(p=>{ const o={day:+p.day}; MAIN.forEach(([k])=>o[k]=toDate(p[k])); return o; });
       monthMeta = {zone:data.zone};
       source = `Source: JAKIM e-Solat (zone ${data.zone}${zoneSetting==='auto'?', from GPS':', chosen manually'})${offline?' · saved offline copy':' via waktusolat.app'}`;
@@ -398,7 +519,7 @@
       $('zline').textContent = town ? `Zone ${data.zone} · ${zn}` : `Zone ${data.zone}`;
     }else if(lat!=null){
       today = calcTimes(y,m,d,lat,lng);
-      tomorrowFajr = calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr;
+      tomorrow = calcTimes(tm.y,tm.m,tm.d,lat,lng); tomorrowFajr = tomorrow.fajr;
       const days = new Date(Date.UTC(y,m,0)).getUTCDate();
       monthRows = Array.from({length:days},(_,i)=>({day:i+1,...calcTimes(y,m,i+1,lat,lng)}));
       monthMeta = {estimate:true};
@@ -410,7 +531,7 @@
       return;
     }
     $('src').textContent = source;
-    render(); renderMonth();
+    render(); renderMonth(); renderRamadan(); renderEvents();
   }
 
   // ---------- zone picker ----------
@@ -438,6 +559,11 @@
   let heading=null, shown=null, aligned=false, lastText='', accLevel='', lastFrame=0;
   const rose=$('rose');
   const wrap180 = a => ((a % 360) + 540) % 360 - 180;
+  // Haptic: iOS 18+ Safari ticks when a switch toggles; Android uses vibrate
+  function haptic(){
+    try{ if(navigator.vibrate && navigator.vibrate([40,60,40])) return; }catch(e){}
+    try{ $('hapLbl').click(); }catch(e){}
+  }
   function onOrient(e){
     let h = null;
     if(typeof e.webkitCompassHeading==='number') h = e.webkitCompassHeading;           // iOS
@@ -464,7 +590,7 @@
     }
     if(qibla!=null){
       const off = wrap180(qibla - shown);
-      if(aligned ? Math.abs(off) > 5 : Math.abs(off) <= 3) aligned = !aligned;
+      if(aligned ? Math.abs(off) > 5 : Math.abs(off) <= 3){ aligned = !aligned; if(aligned) haptic(); }
       const txt = aligned ? '✓ You are facing the Qibla' : `Turn ${off>0?'right':'left'} ${Math.round(Math.abs(off))}°`;
       if(txt!==lastText){ const st=$('qstatus'); st.textContent=txt; st.className= aligned?'status ok':'status'; lastText=txt; }
     }
@@ -495,7 +621,7 @@
   // tabs
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-    ['today','month','qibla'].forEach(t=>$('tab-'+t).classList.toggle('hide',b.dataset.tab!==t));
+    ['today','month','qibla','events'].forEach(t=>$('tab-'+t).classList.toggle('hide',b.dataset.tab!==t));
     if(b.dataset.tab==='month'){ const r=$('mBody').querySelector('tr.today'); if(r) r.scrollIntoView({block:'center'}); }
   }));
   $('compassBtn').addEventListener('click',enableCompass);
@@ -508,7 +634,8 @@
   window.__test = {calcTimes, qiblaBearing, fmtHijri};
   setDateLine('');
   start();
-  setInterval(render,1000);
+  setInterval(()=>{ render(); renderRamadan(); },1000);
+  renderEvents();
 })();
 </script>
 </body>
