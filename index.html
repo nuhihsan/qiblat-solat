@@ -42,7 +42,7 @@
   .times li.extra .t{font-weight:600}
   .times li.extra small{font-size:11px;opacity:.8;margin-left:6px}
   .tabs{display:flex;gap:8px;margin-bottom:14px}
-  .tabs button{flex:1;padding:10px 4px;font-size:15px}
+  .tabs{gap:6px}.tabs button{flex:1;padding:10px 2px;font-size:14px}
   .tabs button.on{background:var(--acc);color:#1b1404}
   .compass{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:8px auto 12px}
   .rose{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%}
@@ -122,6 +122,7 @@
     <button data-tab="month">Month</button>
     <button data-tab="qibla">Qibla</button>
     <button data-tab="events">Events</button>
+    <button data-tab="guide">Guide</button>
   </div>
 
   <section id="tab-today">
@@ -161,6 +162,8 @@
       <p class="note"><span class="tag">Holiday</span> federal or state public holiday, per the government's gazetted list. <span class="tag obs">Observance</span> estimated from the Hijri calendar and may shift by a day. All Islamic dates depend on JAKIM's moon sighting and can change.</p>
     </div>
   </section>
+
+  <section id="tab-guide" class="hide"><div id="guideRoot"></div></section>
 
   <section id="tab-qibla" class="hide">
     <div class="card">
@@ -621,7 +624,7 @@
   // tabs
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-    ['today','month','qibla','events'].forEach(t=>$('tab-'+t).classList.toggle('hide',b.dataset.tab!==t));
+    ['today','month','qibla','events','guide'].forEach(t=>$('tab-'+t).classList.toggle('hide',b.dataset.tab!==t));
     if(b.dataset.tab==='month'){ const r=$('mBody').querySelector('tr.today'); if(r) r.scrollIntoView({block:'center'}); }
   }));
   $('compassBtn').addEventListener('click',enableCompass);
@@ -638,5 +641,6 @@
   renderEvents();
 })();
 </script>
+<script src="guide.js"></script>
 </body>
 </html>

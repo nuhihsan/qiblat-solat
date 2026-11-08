@@ -1,7 +1,7 @@
 // Offline support: the app shell is served from cache and refreshed in the background.
 // Prayer-time API calls go to the network first and fall back to the last saved copy.
-const CACHE = 'prayer-app-v6';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-512.png'];
+const CACHE = 'prayer-app-v8';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-512.png', './guide.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -21,7 +21,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
 
   // Prayer-time API: network first, cached copy if offline
-  if (url.hostname === 'api.waktusolat.app') {
+  if (url.hostname === 'api.waktusolat.app' || url.hostname === 'api.alquran.cloud') {
     e.respondWith(
       fetch(req).then(res => {
         if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }
