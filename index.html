@@ -76,6 +76,7 @@
     <div>
       <h1>PRAYER TIMES & QIBLA</h1>
       <div class="loc" id="loc">Finding your location…</div>
+      <div class="sub" id="zline"></div>
       <div class="sub" id="date"></div>
     </div>
     <div class="hbtns">
@@ -246,6 +247,18 @@
     const z = (await getZones()).find(z=>(z.jakimCode||z.code)===code);
     return z ? `${z.daerah}, ${z.negeri}` : null;
   }
+  // Nearest town via OpenStreetMap (free, cached per ~1 km so it is rarely called)
+  async function townName(lat,lng){
+    const key = `town:${lat.toFixed(2)},${lng.toFixed(2)}`;
+    const hit = store.get(key); if(hit) return hit;
+    try{
+      const j = await fetchJson(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat.toFixed(4)}&lon=${lng.toFixed(4)}&zoom=14&accept-language=en`);
+      const a = (j && j.address) || {};
+      const t = a.city || a.town || a.village || a.municipality || a.suburb || a.county || null;
+      if(t){ store.set(key,t); store.set('lastTown',t); }
+      return t;
+    }catch(e){ return store.get('lastTown'); }
+  }
   async function loadMonth(zoneSetting, lat, lng){
     const {y,m} = myParts();
     const url = zoneSetting==='auto'
@@ -379,7 +392,10 @@
       monthMeta = {zone:data.zone};
       source = `Source: JAKIM e-Solat (zone ${data.zone}${zoneSetting==='auto'?', from GPS':', chosen manually'})${offline?' · saved offline copy':' via waktusolat.app'}`;
       setDateLine(today.hijri);
-      $('loc').textContent = (await zoneName(data.zone)) || `Zone ${data.zone}`;
+      const zn = (await zoneName(data.zone)) || data.zone;
+      const town = (zoneSetting==='auto' && lat!=null) ? await townName(lat,lng) : null;
+      $('loc').textContent = town || zn;
+      $('zline').textContent = town ? `Zone ${data.zone} · ${zn}` : `Zone ${data.zone}`;
     }else if(lat!=null){
       today = calcTimes(y,m,d,lat,lng);
       tomorrowFajr = calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr;
