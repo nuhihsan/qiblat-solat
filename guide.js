@@ -257,6 +257,7 @@
     .res{margin-top:12px;border-radius:14px;padding:12px;font-size:14px;line-height:1.5}
     .res b{font-size:18px;display:block;margin-bottom:4px} .res p{margin-top:6px}
     .res.ok{background:#1d3b2a;border:1px solid #2f6b47} .res.ok b{color:#5fd39a}
+    .res.dep{background:#3a3118;border:1px solid #6a5a2d} .res.dep b{color:#e8c66a}
     .res.no{background:#3a1f1f;border:1px solid #6a2d2d} .res.no b{color:#ffb3b3}
     .lang{display:flex;gap:6px;margin-top:6px} .lang button{flex:1;padding:6px;font-size:13px} .lang button.on{background:#e8c66a;color:#1b1404}
   `;
@@ -322,6 +323,19 @@
 
   // ---------------- Jamak & Qasar checker ----------------
   const MARHALAH_KM = 81;
+  // Trip purposes. 'ok' = permissible, 'dep' = depends on what the event involves, 'sin' = sinful purpose.
+  const PURPOSES = [
+    ['Work & business', [['Business trip / outstation work','ok'],['Client or partner meeting','ok'],['Conference or convention','ok'],['Exhibition or trade fair (exhibiting or visiting)','ok'],['Training, course or seminar','ok'],['Site visit, inspection or audit','ok'],['Job interview','ok'],['Driving for work (lorry, bus, e-hailing, delivery)','ok'],['Posting or transfer to a new workplace','ok']]],
+    ['Study', [['Going back to campus / hostel','ok'],['Exam or test','ok'],['School or university trip','ok'],['Convocation','ok'],['Student competition or camp','ok']]],
+    ['Family & social', [['Balik kampung','ok'],['Visiting parents, family or friends','ok'],['Wedding or kenduri','ok'],['Hari Raya visits (ziarah raya)','ok'],['Funeral or tahlil','ok'],['Visiting someone who is sick','ok'],['Birth of a child / berpantang','ok']]],
+    ['Religious', [['Umrah or Haji','ok'],['Religious talk, ceramah or kuliah','ok'],['Visiting mosques or Islamic heritage sites','ok'],['Tahfiz or pondok studies','ok'],['Dakwah or religious programme','ok']]],
+    ['Health', [['Medical treatment or hospital appointment','ok'],['Accompanying a family member for treatment','ok'],['Rehab or therapy','ok']]],
+    ['Holiday & leisure', [['Holiday / vacation','ok'],['Sightseeing','ok'],['Beach, island or nature trip','ok'],['Hiking, camping or outdoor activity','ok'],['Theme park or family attraction','ok'],['Food trip','ok'],['Shopping trip','ok'],['Honeymoon','ok']]],
+    ['Sports', [['Competing in a sports event','ok'],['Watching a sports match','ok'],['Marathon, fun run or cycling event','ok'],['Fishing trip','ok'],['Sports training camp','ok']]],
+    ['Events & entertainment', [['Book fair or education fair','ok'],['Car show, tech or hobby expo','ok'],['Cultural or heritage festival','ok'],['Concert or music festival','dep'],['Other entertainment event','dep']]],
+    ['Personal matters', [['Government or legal matters (JPN, court, embassy)','ok'],['Moving house','ok'],['Buying or selling a car or property','ok'],['Collecting or delivering goods','ok'],['Volunteering, charity or disaster relief','ok']]],
+    ['Other', [['Other permissible purpose','ok'],['A trip whose purpose is sinful','sin']]],
+  ];
   let trip = { km:null, label:'' };
   function vTravel(){
     return `<div class="card"><div class="gh">Can I jamak and qasar?</div>
@@ -335,8 +349,7 @@
       <label class="fl">Or type the distance yourself (km)</label>
       <input id="tKm" type="number" inputmode="decimal" placeholder="e.g. 120">
       <label class="fl">Purpose of the trip</label>
-      <p class="mn" style="margin-bottom:6px">Work, family, study, medical and holiday trips all count as permissible.</p>
-      <select id="tPurpose"><option value="ok">Permissible</option><option value="sin">Sinful</option></select>
+      <select id="tPurpose">${PURPOSES.map(([g,items])=>`<optgroup label="${g}">${items.map(([l,v])=>`<option value="${v}|${l}">${l}</option>`).join('')}</optgroup>`).join('')}</select>
       <label class="fl">How long will you stay at the destination?</label>
       <p class="mn" style="margin-bottom:6px">Count full days only. The day you arrive and the day you leave are not counted. Choose "Not sure yet" if you will leave as soon as your business is done.</p>
       <select id="tStay">
@@ -378,13 +391,16 @@
   function checkTrip(){
     const km = parseFloat($('tKm').value); const out=$('tResult');
     if(!(km>0)){ out.innerHTML='<p class="mn" style="margin-top:10px">Enter a destination or a distance first.</p>'; return; }
-    const purpose=$('tPurpose').value, stay=$('tStay').value;
-    let ok = km >= MARHALAH_KM && purpose==='ok';
+    const [purpose, plabel] = $('tPurpose').value.split('|'), stay=$('tStay').value;
+    let ok = km >= MARHALAH_KM && purpose!=='sin';
+    let cls = 'ok';
     let head, body=[];
-    if(purpose==='sin'){ head='Not eligible'; body.push('Jamak and qasar are a concession (rukhsah) for permissible travel. They do not apply to a journey made for a sinful purpose.'); }
-    else if(km < MARHALAH_KM){ head='Not eligible'; body.push(`At about ${Math.round(km)} km, the trip is under 2 marhalah (${MARHALAH_KM} km). Pray each prayer in full and on time.`); }
+    if(purpose==='sin'){ cls='no'; head='Not eligible'; body.push('Jamak and qasar are a concession (rukhsah) for permissible travel. They do not apply to a journey made for a sinful purpose.'); }
+    else if(km < MARHALAH_KM){ cls='no'; head='Not eligible'; body.push(`At about ${Math.round(km)} km, the trip is under 2 marhalah (${MARHALAH_KM} km). Pray each prayer in full and on time.`); }
     else {
       head='Eligible';
+      if(purpose==='dep'){ head='Depends on the event'; cls='dep';
+        body.push(`The distance qualifies. For “${plabel}”, eligibility depends on what the event involves: the concession (rukhsah) applies only if the main purpose of the trip is permissible. If unsure, ask your state’s Jabatan Mufti before relying on it.`); }
       body.push(`At about ${Math.round(km)} km, the trip is over 2 marhalah (${MARHALAH_KM} km), so you may jamak and qasar once you have left your town or village area.`);
       if(km < 90) body.push('Note: this is close to the limit. 81 km is gazetted in Johor and Perak and used by Pejabat Mufti WP, but one Mufti WP article calculates 2 marhalah as about 89 to 90 km. If unsure, follow your state’s fatwa.');
       if(stay==='short') body.push('At the destination you may continue for up to 3 full days, not counting the day you arrive and the day you leave.');
@@ -398,7 +414,7 @@
       <li>Jamak taqdim (in the earlier prayer’s time): pray the earlier one first, intend jamak in that first prayer, and pray the second straight after.</li>
       <li>Jamak takhir (in the later prayer’s time): intend to delay while the first prayer’s time is still in, and still be travelling when you pray them.</li>
       <li>Once you are home, pray normally.</li></ol>` : '';
-    out.innerHTML = `<div class="res ${ok?'ok':'no'}"><b>${head}</b>${body.map(b=>`<p>${b}</p>`).join('')}</div>${rules}
+    out.innerHTML = `<div class="res ${cls}"><b>${head}</b>${body.map(b=>`<p>${b}</p>`).join('')}</div>${rules}
       <p class="mn" style="margin-top:8px">This is a guide based on Shafi’i rulings used in Malaysia, not a fatwa. Each state’s Jabatan Mufti has the final say.</p>
       ${srcHtml(['kafi255','kafi1177','kafi1181','kafi1197','kafi1690','perak81','johor81'])}`;
   }
