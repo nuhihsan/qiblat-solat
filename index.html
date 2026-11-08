@@ -56,13 +56,17 @@
   .note{font-size:12px;color:var(--mut);line-height:1.5;margin-top:10px}
   .err{background:#3a1b1b;border-color:#6a2d2d;color:#ffd9d9;font-size:14px;line-height:1.5}
   .src{font-size:12px;color:var(--mut);text-align:center;margin-top:8px;line-height:1.5}
+  .sbar{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--bg);z-index:50}
   .hide{display:none!important}
   .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
   .mhead b{font-size:17px}
-  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
-  th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;padding:6px 2px;text-align:center;position:sticky;top:0;background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+  th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;padding:6px 2px;text-align:center;position:sticky;top:env(safe-area-inset-top);background:var(--card)}
   td{padding:8px 2px;text-align:center;border-top:1px solid var(--line)}
-  td:first-child{text-align:left;font-weight:700;padding-left:4px}
+  td:first-child{text-align:left;font-weight:700;padding-left:4px;white-space:nowrap;width:1%}
+  td:first-child .dn{display:inline-block;min-width:1.4em;text-align:right}
+  td:first-child .wdy{font-weight:400;opacity:.7;margin-left:4px;display:inline-block;width:1.6em}
+  table{table-layout:auto}
   tr.today td{background:#2a4a33;color:var(--acc);font-weight:700}
   tr.fri td:first-child{color:var(--ok)}
   .ram{background:linear-gradient(135deg,#2a2410,#12302a);border-color:#5a4a1a;text-align:center}
@@ -94,6 +98,7 @@
 </style>
 </head>
 <body>
+<div class="sbar"></div>
 <div class="wrap">
   <header>
     <div>
@@ -449,7 +454,7 @@
       const dow = new Date(Date.UTC(y,m-1,r.day)).getUTCDay();
       if(r.day===d) tr.className='today'; else if(dow===5) tr.className='fri';
       const wd = ['Su','Mo','Tu','We','Th','Fr','Sa'][dow];
-      tr.innerHTML = `<td>${r.day} <span style="font-weight:400;opacity:.7">${wd}</span></td>` +
+      tr.innerHTML = `<td><span class="dn">${r.day}</span><span class="wdy">${wd}</span></td>` +
         MAIN.map(([k])=>`<td>${r[k]?fmtShort(r[k]):'–'}</td>`).join('');
       tb.appendChild(tr);
     });

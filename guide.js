@@ -28,7 +28,32 @@
              '<path d="M64 40 l10 0 m-4 -4 l4 4 l-4 4" stroke="#9fbdb4" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M32 40 l-10 0 m4 -4 l-4 4 l4 4" stroke="#9fbdb4" stroke-width="2.5" fill="none" stroke-linecap="round"/>'),
   };
 
-  // ---------------- content ----------------
+  // ---------------- sources (official Malaysian bodies first) ----------------
+  const SRC = {
+    jakimTimes: ['JAKIM e-Solat prayer times (via api.waktusolat.app)', 'https://www.e-solat.gov.my/'],
+    jakimTarawih: ['JAKIM, Panduan Solat Sunat Tarawih (hosted by Pejabat Mufti WP)', 'https://www.muftiwp.gov.my/images/photo/pengumuman/Panduan_Sembahyang_Sunat_Tarawih.pdf'],
+    kafi1181: ['Pejabat Mufti WP, Al-Kafi #1181: Maksud dua marhalah', 'https://muftiwp.gov.my/artikel/al-kafi-li-al-fatawi/3248-al-kafi-1181-maksud-dua-marhalah-di-dalam-jamak-dan-qasar'],
+    kafi255: ['Pejabat Mufti WP, Al-Kafi #255: Musafir, muqim dan mastautin', 'https://muftiwp.gov.my/en/artikel/al-kafi-li-al-fatawi/1364-al-kafi-255-the-meaning-of-musafir-muqim-and-mastautin-for-jamak-and-qasar'],
+    kafi1177: ['Pejabat Mufti WP, Al-Kafi #1177: Jamak qasar tanpa bermalam', 'https://muftiwp.gov.my/artikel/al-kafi-li-al-fatawi/3241-al-kafi-1177-hukum-solat-jamak-qasar-semasa-musafir-tanpa-bermalam'],
+    kafi1197: ['Pejabat Mufti WP, Al-Kafi #1197: Bercuti dan rukhsah jamak qasar', 'https://www.muftiwp.gov.my/en/artikel/al-kafi-li-al-fatawi/3275-al-kafi-1197-is-going-on-a-holiday-for-fun-and-recreation-considered-rukhsah-for-jamak-and-qasar'],
+    kafi1690: ['Pejabat Mufti WP, Al-Kafi #1690: Jamak sehingga 18 hari', 'https://www.muftiwp.gov.my/artikel/al-kafi-li-al-fatawi/4404-al-kafi-1690-jamak-solat-sehingga-18-hari'],
+    perak81: ['Jabatan Mufti Negeri Perak, Penentuan kadar dua marhalah (81 km)', 'https://mufti.perak.gov.my/images/Fatwa%20tidak%20warta/8.NEW%20PENENTUAN%20KADAR%20DUA%20MARHALAH%20QARYAH%20DAN%20BALAD%20DARI%20PERSPEKTIF%20FIQH%20SEMASA.pdf'],
+    johor81: ['Johor State Fatwa gazette on 81 km (Utusan Malaysia report)', 'https://www.utusan.com.my/berita/2023/11/johor-tetapkan-81-km-syarat-sah-solat-jamak-qasar/'],
+    kafi1641: ['Pejabat Mufti WP, Al-Kafi #1641: Solat Dhuha 8 rakaat', 'https://muftiwp.gov.my/artikel/al-kafi-li-al-fatawi/4278-al-kafi-1641-isu-solat-dhuha-8-rakaat-secara-terpisah'],
+    kafi1393: ['Pejabat Mufti WP, Al-Kafi #1393: Tatacara solat witir yang afdhal', 'https://muftiwp.gov.my/artikel/al-kafi-li-al-fatawi/3734-al-kafi-1393-tatacara-solat-witir-yang-afdhal'],
+    kafi1729: ['Pejabat Mufti WP, Al-Kafi #1729: Witir satu rakaat dahulu?', 'https://muftiwp.gov.my/en/artikel/al-kafi-li-al-fatawi/4519-al-kafi-1729-is-it-permissible-to-perform-the-witir-prayer-starting-with-one-rakaat-followed-by-two-rakaat'],
+    irsyad143: ['Pejabat Mufti WP, Irsyad Ramadhan #143: Ba’diyah Isyak dan Tarawih', 'https://www.muftiwp.gov.my/en/artikel/irsyad-fatwa/irsyad-fatwa-khas-ramadhan-cat/3437-irsyad-al-fatwa-khas-ramadhan-siri-ke-143-solat-sunat-ba-diyah-isyak-dahulu-atau-terus-solat-sunat-tarawih'],
+    kafi1212: ['Pejabat Mufti WP, Al-Kafi #1212: Ba’diyah Isyak', 'https://muftiwp.gov.my/en/artikel/al-kafi-li-al-fatawi/3299-al-kafi-1212-bolehkah-dilakukan-solat-sunat-ba-diyah-isyak-selepas-tempoh-yang-lama'],
+    irsyad356: ['Pejabat Mufti WP, Irsyad #356 and related articles on istikharah', 'https://muftiwp.gov.my/en/artikel/irsyad-fatwa/irsyad-fatwa-umum-cat/3943-irsyad-al-fatwa-series-356-is-it-permissible-to-perform-istikharah-before-committing-haram'],
+    perakRaya: ['Jabatan Mufti Negeri Perak, Panduan Hari Raya', 'https://mufti.Perak.gov.my/images/garis_panduan/GPRaya.pdf'],
+    pahangRaya: ['Jabatan Mufti Negeri Pahang, Sunat-sunat Hari Raya', 'https://mufti.pahang.gov.my/wp-content/uploads/2022/04/HARI-RAYA-3.0artikel.pdf'],
+    jenazahKKM: ['KKM / HTAR Klang, Panduan Ringkas Solat Jenazah', 'https://jknselangor.moh.gov.my/htar/images/pdf/UHEI/kematian.pdf'],
+    basmeih: ['Tafsir Pimpinan Ar-Rahman (Abdullah Basmeih), published by JAKIM', 'https://hrmars.com/journals/papers/IJARPED/v14-i2/25006'],
+  };
+  const srcHtml = keys => `<div class="srcs"><b>Sources</b>${keys.map(k=>{const [t,u]=SRC[k]; return `<a href="${u}" target="_blank" rel="noopener">${t} ↗</a>`;}).join('')}</div>`;
+  const UNVERIFIED = '<div class="srcs"><b>Source</b><span>Standard Shafi’i practice taught in Malaysia. No single JAKIM page found for this prayer, so check with your local mosque or Jabatan Mufti.</span></div>';
+
+  // ---------------- types of prayer ----------------
   const TYPES = [
     { h:'Fardhu (obligatory)', items:[
       ['Subuh','2 rakaat','Recited aloud. From dawn (Fajr) until sunrise.'],
@@ -38,23 +63,112 @@
       ['Isyak','4 rakaat','First 2 rakaat aloud. From Isyak until dawn.'],
       ['Jumaat','2 rakaat','Replaces Zohor on Friday, in congregation after two khutbah. Obligatory for adult Muslim men who are not travelling.'],
     ]},
-    { h:'Sunat (recommended)', items:[
-      ['Rawatib','2 rakaat each','Before Subuh (2), before and after Zohor (2 + 2), after Maghrib (2), after Isyak (2). These are the stressed (muakkad) ones.'],
-      ['Witir','1 to 11 rakaat (odd)','After Isyak until dawn. Commonly 3 rakaat (2 + 1). Closes the night prayers.'],
-      ['Dhuha','2 to 8 rakaat','Mid-morning, from about 20 to 25 minutes after sunrise until shortly before Zohor.'],
-      ['Tahajjud','2 rakaat or more','At night after sleeping, best in the last third of the night.'],
-      ['Tarawih','8 or 20 rakaat','Ramadan nights after Isyak, prayed in sets of 2, followed by Witir.'],
-      ['Hari Raya','2 rakaat','Morning of Aidilfitri and Aidiladha. 7 extra takbir in the 1st rakaat and 5 in the 2nd, followed by a khutbah.'],
-      ['Tahiyyatul Masjid','2 rakaat','On entering a mosque, before sitting down.'],
-      ['Istikharah','2 rakaat','When asking Allah for guidance on a decision, followed by the doa istikharah.'],
-      ['Hajat','2 rakaat or more','When asking Allah for a specific need.'],
-      ['Taubat','2 rakaat','When seeking forgiveness for a sin.'],
-      ['Gerhana','2 rakaat','During a solar or lunar eclipse. Each rakaat has 2 standings and 2 ruku.'],
+    { h:'Sunat (recommended) · tap for how to pray', items:[
+      ['Rawatib','2 rakaat each','Before and after the fardhu prayers.','rawatib'],
+      ['Witir','1 to 11 rakaat (odd)','After Isyak until dawn. Closes the night prayers.','witir'],
+      ['Dhuha','2 to 12 rakaat','Mid-morning, after sunrise until before Zohor.','dhuha'],
+      ['Tahajjud','2 rakaat or more','At night after sleeping.','tahajjud'],
+      ['Tarawih','8 or 20 rakaat','Ramadan nights after Isyak.','tarawih'],
+      ['Hari Raya','2 rakaat','Morning of Aidilfitri and Aidiladha, with extra takbir.','raya'],
+      ['Tahiyyatul Masjid','2 rakaat','On entering a mosque, before sitting.','tahiyyat'],
+      ['Istikharah','2 rakaat','Asking Allah for guidance on a decision.','istikharah'],
+      ['Hajat','2 rakaat or more','Asking Allah for a specific need.','hajat'],
+      ['Taubat','2 rakaat','Seeking forgiveness for a sin.','taubat'],
+      ['Gerhana','2 rakaat','During a solar or lunar eclipse.','gerhana'],
     ]},
-    { h:'Special cases', items:[
-      ['Jenazah','4 takbir, standing only','Fardhu kifayah. No ruku or sujud. After the 1st takbir recite Al-Fatihah, after the 2nd selawat, after the 3rd and 4th doa for the deceased, then salam.'],
-      ['Jamak & Qasar','For travellers','When travelling about 2 marhalah (around 81 km) or more: Jamak combines Zohor with Asar, or Maghrib with Isyak. Qasar shortens 4-rakaat prayers to 2. Maghrib and Subuh are never shortened.'],
+    { h:'Special cases · tap for details', items:[
+      ['Jenazah','4 takbir, standing only','Funeral prayer. Fardhu kifayah.','jenazah'],
+      ['Jamak & Qasar','For travellers','Combining and shortening prayers. Includes an eligibility checker.','travel'],
     ]},
+  ];
+
+  // Detailed guides. "How" lists only what differs from a normal 2-rakaat prayer (see How to pray).
+  const SUNAT = {
+    rawatib: { t:'Solat Sunat Rawatib', hukum:'Sunat. Some are muakkad (strongly encouraged).', when:'Qabliyah: after the fardhu time begins, before the fardhu. Ba’diyah: after the fardhu, until that prayer’s time ends. Best not to delay ba’diyah too long.', rakaat:'2 rakaat each, with one salam.',
+      how:['Muakkad: 2 before Subuh, 2 (or 4) before Zohor, 2 after Zohor, 2 after Maghrib, 2 after Isyak.','Others (ghairu muakkad): before Asar, before Maghrib, before Isyak, and the extra 2 after Zohor.','Pray exactly like a normal 2-rakaat prayer, recited silently.','On Ramadan nights, pray ba’diyah Isyak first, then Tarawih.'],
+      niat:['Usolli sunnatas-Subhi rak‘ataini qabliyyatan lillāhi ta‘ālā','Sahaja aku solat sunat qabliyah Subuh dua rakaat kerana Allah Taala. (Change Subuh/qabliyah to suit, e.g. ba’diyah Maghrib.)'],
+      src:['irsyad143','kafi1212'] },
+    witir: { t:'Solat Sunat Witir', hukum:'Sunat muakkad.', when:'After Isyak (and its ba’diyah) until dawn. Usually the last prayer of the night.', rakaat:'Odd number: 1, 3, 5 … up to 11. In Malaysia it is commonly 3 after Tarawih.',
+      how:['Common way (3 rakaat): pray 2 rakaat with salam, then 1 rakaat with salam. The 2 come first, then the 1.','Or pray all 3 with one salam. Then there is only one tasyahhud, at the end (unlike Maghrib, which has two).','The single final rakaat is prayed like a normal rakaat, ending with tahiyyat akhir and salam.'],
+      niat:['Sahaja aku solat sunat Witir dua rakaat kerana Allah Taala.','Then for the last: Sahaja aku solat sunat Witir satu rakaat kerana Allah Taala.'],
+      src:['jakimTarawih','kafi1393','kafi1729'] },
+    dhuha: { t:'Solat Sunat Dhuha', hukum:'Sunat.', when:'From about 25 minutes after sunrise (JAKIM almanac) until shortly before Zohor. The app’s Today tab shows the start time.', rakaat:'Minimum 2. The Shafi’i school prioritises 8; the maximum is 12. Give salam every 2 rakaat.',
+      how:['Pray in sets of 2 rakaat, each set like a normal 2-rakaat prayer.','Repeat the niat for each set of 2.'],
+      niat:['Usolli sunnatad-Dhuhā rak‘ataini lillāhi ta‘ālā','Sahaja aku solat sunat Dhuha dua rakaat kerana Allah Taala.'],
+      src:['kafi1641'] },
+    tahajjud: { t:'Solat Sunat Tahajjud', hukum:'Sunat.', when:'At night after Isyak, after having slept, until dawn. Best in the last third of the night.', rakaat:'Minimum 2, in sets of 2. Often followed by Witir.',
+      how:['Sleep first, then wake and take wudhu.','Pray sets of 2 rakaat like a normal 2-rakaat prayer.','Close the night with Witir if you have not prayed it yet.'],
+      niat:['Usolli sunnatat-Tahajjudi rak‘ataini lillāhi ta‘ālā','Sahaja aku solat sunat Tahajjud dua rakaat kerana Allah Taala.'],
+      src:null },
+    tarawih: { t:'Solat Sunat Tarawih', hukum:'Sunat, only in Ramadan.', when:'After Isyak and its 2-rakaat ba’diyah, on every night of Ramadan.', rakaat:'Most Malaysians pray 20 rakaat; some pray 8. Pray 2 rakaat per takbiratul ihram (salam every 2).',
+      how:['Each set of 2 is like a normal 2-rakaat prayer.','In congregation, the bilal leads selawat and zikir between sets.','Finish with Witir, commonly 3 rakaat (2 + 1).','It may also be prayed alone at home.'],
+      niat:['Sahaja aku solat sunat Tarawih dua rakaat (sebagai makmum) kerana Allah Taala.'],
+      src:['jakimTarawih','irsyad143'] },
+    raya: { t:'Solat Sunat Hari Raya', hukum:'Sunat muakkad.', when:'Morning of 1 Syawal (Aidilfitri) or 10 Zulhijjah (Aidiladha), after the sun has risen, before Zohor. Your mosque announces the time.', rakaat:'2 rakaat, then 2 khutbah if in congregation.',
+      how:['After takbiratul ihram and doa iftitah, say 7 extra takbir before Al-Fatihah in the 1st rakaat.','In the 2nd rakaat, say 5 extra takbir before Al-Fatihah.','Between each takbir, recite: Subhānallāh, walhamdulillāh, wa lā ilāha illallāh, wallāhu akbar.','The rest is like a normal 2-rakaat prayer. Listen to the khutbah afterwards.','Aidilfitri: eat something before leaving. Takbir raya is said from sunset on the eve until the prayer starts.'],
+      niat:['Sahaja aku solat sunat Hari Raya Aidilfitri (atau Aidiladha) dua rakaat kerana Allah Taala.'],
+      src:['perakRaya','pahangRaya'] },
+    tahiyyat: { t:'Solat Sunat Tahiyyatul Masjid', hukum:'Sunat.', when:'Whenever you enter a mosque, before sitting down.', rakaat:'2 rakaat.',
+      how:['Pray 2 rakaat like a normal 2-rakaat prayer.','If you arrive during the Friday khutbah, you may still pray it but keep it short.','Praying a fardhu or rawatib on arrival also counts for it.'],
+      niat:['Sahaja aku solat sunat Tahiyyatul Masjid dua rakaat kerana Allah Taala.'],
+      src:null },
+    istikharah: { t:'Solat Sunat Istikharah', hukum:'Sunat.', when:'Any time except the forbidden times (e.g. after Subuh until sunrise, after Asar until sunset). Night is preferred.', rakaat:'2 rakaat.',
+      how:['Pray 2 rakaat like a normal 2-rakaat prayer.','After salam, recite the doa istikharah taught by the Prophet SAW (Sahih al-Bukhari), naming your matter.','You do not need a dream as an answer. Go ahead with what Allah makes easy, and also seek advice from experienced people.','It can be repeated.'],
+      niat:['Sahaja aku solat sunat Istikharah dua rakaat kerana Allah Taala.'],
+      src:['irsyad356'] },
+    hajat: { t:'Solat Sunat Hajat', hukum:'Sunat.', when:'Any time outside the forbidden times. Night is preferred.', rakaat:'2 rakaat, or more in sets of 2.',
+      how:['Pray 2 rakaat like a normal 2-rakaat prayer.','After salam, praise Allah, send selawat, then ask Allah for your need in your own words.'],
+      niat:['Sahaja aku solat sunat Hajat dua rakaat kerana Allah Taala.'],
+      src:null },
+    taubat: { t:'Solat Sunat Taubat', hukum:'Sunat.', when:'As soon as possible after a sin, outside the forbidden times.', rakaat:'2 rakaat.',
+      how:['Pray 2 rakaat like a normal 2-rakaat prayer.','After salam, ask forgiveness sincerely (istighfar). Regret the sin, stop it, and resolve not to repeat it. If it wronged someone, make it right with them.'],
+      niat:['Sahaja aku solat sunat Taubat dua rakaat kerana Allah Taala.'],
+      src:null },
+    gerhana: { t:'Solat Sunat Gerhana', hukum:'Sunat muakkad.', when:'While a solar (kusuf) or lunar (khusuf) eclipse is visible in your area. Mosques announce it.', rakaat:'2 rakaat. Each rakaat has 2 standings, 2 Al-Fatihah and 2 ruku.',
+      how:['Rakaat 1: Al-Fatihah and a surah, ruku, rise, then Al-Fatihah and a surah again, ruku again, i’tidal, then 2 sujud as normal.','Rakaat 2: the same pattern, then tahiyyat and salam.','The first standing and ruku of each rakaat are longer than the second.','In congregation, 2 khutbah follow the prayer.'],
+      niat:['Sahaja aku solat sunat Gerhana Matahari (atau Bulan) dua rakaat kerana Allah Taala.'],
+      src:null },
+    jenazah: { t:'Solat Jenazah', hukum:'Fardhu kifayah (obligatory on the community, fulfilled if some perform it).', when:'After the body has been washed and shrouded.', rakaat:'4 takbir, all standing. No ruku, sujud or sitting.',
+      how:['Takbir 1 (with niat): recite Al-Fatihah.','Takbir 2: recite selawat for the Prophet SAW.','Takbir 3: doa for the deceased, e.g. Allāhummaghfir lahu warhamhu (lahā for a woman).','Takbir 4: doa for the deceased and the living.','Give salam to the right and left.'],
+      niat:['Sahaja aku solat atas jenazah lelaki (atau perempuan) ini empat takbir fardhu kifayah kerana Allah Taala.'],
+      src:['jenazahKKM'] },
+  };
+
+  // ---------------- Rukun Islam & Rukun Iman ----------------
+  const RUKUN_ISLAM = [
+    ['Syahadah','Declaring the two testimonies of faith: there is no god but Allah, and Muhammad is the Messenger of Allah.'],
+    ['Solat','Performing the five daily obligatory prayers.'],
+    ['Zakat','Paying the obligatory alms (zakat fitrah and zakat harta) when conditions are met.'],
+    ['Puasa','Fasting in the month of Ramadan.'],
+    ['Haji','Performing the pilgrimage to Makkah once in a lifetime, for those who are able.'],
+  ];
+  const RUKUN_IMAN = [
+    ['Allah','Believing in Allah, the One God.'],
+    ['Malaikat','Believing in His angels.'],
+    ['Kitab','Believing in His revealed books (Taurat, Zabur, Injil and Al-Quran).'],
+    ['Rasul','Believing in His messengers.'],
+    ['Hari Akhirat','Believing in the Last Day.'],
+    ['Qada’ dan Qadar','Believing in divine decree, both the good and the bad.'],
+  ];
+
+  // ---------------- surahs (ayah counts per the standard Uthmani mushaf) ----------------
+  const SURAHS = [
+    { n:1, ref:'1', name:'Al-Fatihah', en:'The Opening', ayat:7, note:'Required in every rakaat' },
+    { n:255, ref:'2:255', name:'Ayat al-Kursi', en:'Al-Baqarah, verse 255', ayat:1, note:'Often read after prayer', ayah:true },
+    { n:36, ref:'36', name:'Yasin', en:'Ya Sin', ayat:83, note:'Commonly read on Thursday nights' },
+    { n:97, ref:'97', name:'Al-Qadr', en:'The Night of Decree', ayat:5 },
+    { n:102, ref:'102', name:'At-Takathur', en:'Rivalry in Worldly Increase', ayat:8 },
+    { n:103, ref:'103', name:'Al-‘Asr', en:'Time', ayat:3 },
+    { n:105, ref:'105', name:'Al-Fil', en:'The Elephant', ayat:5 },
+    { n:106, ref:'106', name:'Quraisy', en:'Quraysh', ayat:4 },
+    { n:107, ref:'107', name:'Al-Ma‘un', en:'Small Kindnesses', ayat:7 },
+    { n:108, ref:'108', name:'Al-Kauthar', en:'Abundance', ayat:3, note:'Shortest surah' },
+    { n:109, ref:'109', name:'Al-Kafirun', en:'The Disbelievers', ayat:6 },
+    { n:110, ref:'110', name:'An-Nasr', en:'Divine Help', ayat:3 },
+    { n:111, ref:'111', name:'Al-Masad', en:'Palm Fibre', ayat:5 },
+    { n:112, ref:'112', name:'Al-Ikhlas', en:'Sincerity', ayat:4 },
+    { n:113, ref:'113', name:'Al-Falaq', en:'Daybreak', ayat:5 },
+    { n:114, ref:'114', name:'An-Nas', en:'Mankind', ayat:6 },
   ];
 
   const NIAT = [
@@ -92,23 +206,6 @@
     ['In order (tertib)','Perform the required steps in this sequence.', true],
   ];
 
-  const SURAHS = [
-    { n:1, ref:'1', name:'Al-Fatihah', en:'The Opening', note:'Required in every rakaat' },
-    { n:255, ref:'2:255', name:'Ayat al-Kursi', en:'The Throne Verse (Al-Baqarah 255)', note:'Often read after prayer', ayah:true },
-    { n:97, ref:'97', name:'Al-Qadr', en:'The Night of Decree' },
-    { n:102, ref:'102', name:'At-Takathur', en:'Rivalry in Worldly Increase' },
-    { n:103, ref:'103', name:'Al-‘Asr', en:'Time' },
-    { n:105, ref:'105', name:'Al-Fil', en:'The Elephant' },
-    { n:106, ref:'106', name:'Quraisy', en:'Quraysh' },
-    { n:107, ref:'107', name:'Al-Ma‘un', en:'Small Kindnesses' },
-    { n:108, ref:'108', name:'Al-Kauthar', en:'Abundance', note:'Shortest surah' },
-    { n:109, ref:'109', name:'Al-Kafirun', en:'The Disbelievers' },
-    { n:110, ref:'110', name:'An-Nasr', en:'Divine Help' },
-    { n:111, ref:'111', name:'Al-Masad', en:'Palm Fibre' },
-    { n:112, ref:'112', name:'Al-Ikhlas', en:'Sincerity' },
-    { n:113, ref:'113', name:'Al-Falaq', en:'Daybreak' },
-    { n:114, ref:'114', name:'An-Nas', en:'Mankind' },
-  ];
 
   // ---------------- styles ----------------
   const css = document.createElement('style');
@@ -148,6 +245,19 @@
     .bism{text-align:center;direction:rtl;font-family:"Amiri","Geeza Pro",serif;font-size:24px;margin:6px 0 4px}
     .ctl{display:flex;gap:8px;margin:10px 0}
     .ctl button{flex:1}
+    .seg{flex-wrap:wrap;overflow:visible} .seg button{flex:1 1 auto;padding:8px 10px}
+    .ty.tap{cursor:pointer} .ty.tap:active{background:#1f4a40}
+    .kv{display:flex;gap:10px;padding:6px 0;font-size:14px;line-height:1.45} .kv span{width:64px;flex-shrink:0;color:#9fbdb4;font-size:12px;font-weight:700;text-transform:uppercase;padding-top:2px}
+    .ol{padding-left:20px;font-size:14px;line-height:1.55;color:#cfe0da} .ol li{margin:4px 0}
+    .srcs{margin-top:14px;padding-top:10px;border-top:1px solid #1f4a40;font-size:12px;color:#9fbdb4;line-height:1.5}
+    .srcs b{display:block;margin-bottom:4px;color:#eef5f2} .srcs a{display:block;color:#5fd39a;text-decoration:none;margin:3px 0}
+    .fl{display:block;font-size:13px;color:#9fbdb4;margin:12px 0 6px;font-weight:600}
+    .row2{display:flex;gap:8px} .row2 input{flex:1}
+    input{font:inherit;font-size:16px;width:100%;border:1px solid #1f4a40;border-radius:12px;padding:10px 12px;background:#0b1f1a;color:#eef5f2}
+    .res{margin-top:12px;border-radius:14px;padding:12px;font-size:14px;line-height:1.5}
+    .res b{font-size:18px;display:block;margin-bottom:4px} .res p{margin-top:6px}
+    .res.ok{background:#1d3b2a;border:1px solid #2f6b47} .res.ok b{color:#5fd39a}
+    .res.no{background:#3a1f1f;border:1px solid #6a2d2d} .res.no b{color:#ffb3b3}
     .lang{display:flex;gap:6px;margin-top:6px} .lang button{flex:1;padding:6px;font-size:13px} .lang button.on{background:#e8c66a;color:#1b1404}
   `;
   document.head.appendChild(css);
@@ -159,12 +269,27 @@
   let view = 'types';
 
   function seg(){
-    return `<div class="seg">${[['types','Types'],['howto','How to pray'],['wudhu','Wudhu'],['surahs','Surahs']]
-      .map(([k,l])=>`<button data-v="${k}" class="${view===k||(view==='surah'&&k==='surahs')?'on':''}">${l}</button>`).join('')}</div>`;
+    const on = k => view===k || (view==='surah'&&k==='surahs') || (view==='sunat'&&k==='types');
+    return `<div class="seg">${[['types','Types'],['howto','How to pray'],['wudhu','Wudhu'],['rukun','Rukun'],['surahs','Surahs'],['travel','Travel']]
+      .map(([k,l])=>`<button data-v="${k}" class="${on(k)?'on':''}">${l}</button>`).join('')}</div>`;
   }
   function vTypes(){
-    return TYPES.map(g=>`<div class="card"><div class="gh">${g.h}</div>${g.items.map(([n,r,d])=>
-      `<div class="ty"><span class="rk">${r}</span><b>${n}</b><div>${d}</div></div>`).join('')}</div>`).join('');
+    return TYPES.map(g=>`<div class="card"><div class="gh">${g.h}</div>${g.items.map(([n,r,d,key])=>
+      `<div class="ty${key?' tap':''}" ${key?(key==='travel'?'data-v="travel"':`data-k="${key}"`):''}><span class="rk">${r}${key?' ›':''}</span><b>${n}</b><div>${d}</div></div>`).join('')}</div>`).join('');
+  }
+  function vSunat(key){
+    const s = SUNAT[key];
+    return `<div class="card"><button class="lnk" data-v="types">‹ All types</button>
+      <div style="margin:6px 0 10px"><b style="font-size:20px">${s.t}</b></div>
+      <div class="kv"><span>Ruling</span><div>${s.hukum}</div></div>
+      <div class="kv"><span>When</span><div>${s.when}</div></div>
+      <div class="kv"><span>Rakaat</span><div>${s.rakaat}</div></div>
+      <div class="gh" style="margin-top:14px">How it is done</div>
+      <ol class="ol">${s.how.map(h=>`<li>${h}</li>`).join('')}</ol>
+      <div class="gh" style="margin-top:14px">Niat (said softly; the intention is in the heart)</div>
+      ${s.niat.map(n=>`<div class="tr">${n}</div>`).join('')}
+      ${key!=='jenazah'?'<button class="lnk" data-v="howto">See the basic 2-rakaat steps ›</button>':''}
+      ${s.src?srcHtml(s.src):UNVERIFIED}</div>`;
   }
   function vHowto(){
     const steps = STEPS.map(s=>`<div class="step">${POSE[s.p]}<div style="flex:1;min-width:0"><b>${s.t}</b><p>${s.d}</p>
@@ -174,18 +299,114 @@
     return `<div class="card"><div class="gh">Step by step (2 rakaat, e.g. Subuh)</div>
       <p class="mn" style="margin-bottom:6px">For Maghrib (3) and Zohor, Asar, Isyak (4): sit for the first tahiyyat after rakaat 2, then stand and complete the remaining rakaat with Al-Fatihah only.</p>${steps}</div>
       <div class="card"><div class="gh">Niat for the 5 daily prayers</div>${niat}
-      <p class="mn" style="margin-top:8px">The niat itself is in the heart. Saying it softly beforehand is sunat in the Shafi’i school.</p></div>
-      <p class="mn" style="text-align:center;margin-bottom:14px">Based on common Malaysian (Shafi’i) practice. For detailed rulings, refer to JAKIM or your local ustaz.</p>`;
+      <p class="mn" style="margin-top:8px">The niat itself is in the heart. Saying it softly beforehand is sunat in the Shafi’i school.</p>${UNVERIFIED}</div>`;
   }
   function vWudhu(){
     return `<div class="card"><div class="gh">How to take wudhu</div>${WUDHU.map(([t,d,f],i)=>
       `<div class="wd"><div class="no">${i+1}</div><div><b>${t}</b>${f?'<span class="fard">Required</span>':''}<br><span>${d}</span></div></div>`).join('')}
-      <p class="mn" style="margin-top:10px">Steps marked Required are the 6 fardhu of wudhu. The rest are sunat. Wudhu is broken by using the toilet, passing wind, deep sleep, losing consciousness, and (in the Shafi’i school) skin contact between a man and a woman who are not mahram.</p></div>`;
+      <p class="mn" style="margin-top:10px">Steps marked Required are the 6 fardhu of wudhu. The rest are sunat. Wudhu is broken by using the toilet, passing wind, deep sleep, losing consciousness, and (in the Shafi’i school) skin contact between a man and a woman who are not mahram.</p>${UNVERIFIED}</div>`;
+  }
+  function vRukun(){
+    const list = (arr, cls) => arr.map(([t,d],i)=>`<div class="wd"><div class="no ${cls}">${i+1}</div><div><b>${t}</b><br><span>${d}</span></div></div>`).join('');
+    return `<div class="card"><div class="gh">Rukun Islam · 5 pillars of practice</div>${list(RUKUN_ISLAM,'')}
+      <p class="mn" style="margin-top:8px">From the hadith “Islam is built on five” (Sahih al-Bukhari 8, Sahih Muslim 16).</p></div>
+      <div class="card"><div class="gh">Rukun Iman · 6 pillars of faith</div>${list(RUKUN_IMAN,'')}
+      <p class="mn" style="margin-top:8px">From the hadith of Jibril (Sahih Muslim 8).</p></div>`;
   }
   function vSurahs(){
-    return `<div class="card"><div class="gh">Short surahs</div>${SURAHS.map(s=>
-      `<div class="sl" data-s="${s.ref}"><div class="num">${s.ayah?'2:255':s.n}</div><div class="nm"><b>${s.name}</b><div>${s.en}${s.note?` · ${s.note}`:''}</div></div><div class="go">›</div></div>`).join('')}
-      <p class="mn" style="margin-top:8px">Recitation by Mishary Rashid Alafasy. Needs internet the first time; text is saved for offline reading.</p></div>`;
+    return `<div class="card"><div class="gh">Surahs</div>${SURAHS.map(s=>
+      `<div class="sl" data-s="${s.ref}"><div class="num">${s.ayah?'2:255':s.n}</div><div class="nm"><b>${s.name}</b><div>${s.en} · ${s.ayat} ${s.ayat===1?'ayat':'ayat'}${s.note?` · ${s.note}`:''}</div></div><div class="go">›</div></div>`).join('')}
+      <p class="mn" style="margin-top:8px">Arabic text: standard Uthmani script. Malay meaning: Tafsir Pimpinan Ar-Rahman by Abdullah Basmeih, the translation published by JAKIM. English (optional): Sahih International, which is not a JAKIM publication. Recitation by Mishary Rashid Alafasy. Needs internet the first time; text is then saved for offline reading.</p>
+      ${srcHtml(['basmeih'])}</div>`;
+  }
+
+  // ---------------- Jamak & Qasar checker ----------------
+  const MARHALAH_KM = 81;
+  let trip = { km:null, label:'' };
+  function vTravel(){
+    return `<div class="card"><div class="gh">Can I jamak and qasar?</div>
+      <p class="mn">Distance is measured one way, from your home area to your destination.</p>
+      <label class="fl">Where are you going?</label>
+      <div class="row2"><input id="tDest" placeholder="e.g. Ipoh, Kuala Lumpur, Johor Bahru" autocomplete="off"><button class="pri" id="tFind">Find</button></div>
+      <label class="fl">Starting from</label>
+      <select id="tFrom"><option value="gps">My current location</option><option value="town">My home town (type below)</option></select>
+      <input id="tHome" class="hide" placeholder="Your home town, e.g. Sungai Petani" autocomplete="off" style="margin-top:6px">
+      <div id="tDist" class="mn" style="margin-top:8px"></div>
+      <label class="fl">Or type the distance yourself (km)</label>
+      <input id="tKm" type="number" inputmode="decimal" placeholder="e.g. 120">
+      <label class="fl">Purpose of the trip</label>
+      <p class="mn" style="margin-bottom:6px">Work, family, study, medical and holiday trips all count as permissible.</p>
+      <select id="tPurpose"><option value="ok">Permissible</option><option value="sin">Sinful</option></select>
+      <label class="fl">How long will you stay at the destination?</label>
+      <p class="mn" style="margin-bottom:6px">Count full days only. The day you arrive and the day you leave are not counted. Choose "Not sure yet" if you will leave as soon as your business is done.</p>
+      <select id="tStay">
+        <option value="short">Up to 3 days</option>
+        <option value="long">4 days or more</option>
+        <option value="unsure">Not sure yet</option>
+      </select>
+      <button class="pri" id="tCheck" style="width:100%;margin-top:12px">Check</button>
+      <div id="tResult"></div></div>`;
+  }
+  async function geocode(q){
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=en&q=${encodeURIComponent(q)}`);
+    const j = await r.json(); if(!j.length) throw new Error('notfound');
+    return { lat:+j[0].lat, lng:+j[0].lon, name:j[0].display_name.split(',').slice(0,2).join(',') };
+  }
+  function haversine(a,b){ const R=6371, r=x=>x*Math.PI/180; const dLat=r(b.lat-a.lat), dLng=r(b.lng-a.lng);
+    const h=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLng/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+  async function findTrip(){
+    const out=$('tDist'); const q=$('tDest').value.trim(); if(!q){ out.textContent='Type a destination first.'; return; }
+    out.textContent='Looking up the route…';
+    try{
+      let from;
+      if($('tFrom').value==='town'){ const h=$('tHome').value.trim(); if(!h){ out.textContent='Type your home town, or choose current location.'; return; } from = await geocode(h); }
+      else { const p = store.get('pos'); if(!p){ out.textContent='Location not available yet. Open the Today tab first, or type your home town.'; return; } from = {lat:p.lat,lng:p.lng}; }
+      const to = await geocode(q);
+      let km=null, how='by road';
+      try{
+        const ctl=new AbortController(); const to8=setTimeout(()=>ctl.abort(),8000);
+        const r = await fetch(`https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=false`,{signal:ctl.signal});
+        clearTimeout(to8);
+        const j = await r.json(); if(j.code==='Ok') km = j.routes[0].distance/1000;
+      }catch(e){}
+      if(km==null){ km = haversine(from,to); how='in a straight line. The road distance could not be fetched and is usually longer'; }
+      trip = { km, label: to.name };
+      $('tKm').value = Math.round(km);
+      out.innerHTML = `<b>${to.name}</b>: about <b>${Math.round(km)} km</b> ${how}. Check this looks right, and edit the km if needed.`;
+    }catch(e){ out.textContent = e.message==='notfound' ? 'Place not found. Try a bigger town name.' : 'Could not look up the route. Check your internet, or type the km yourself.'; }
+  }
+  function checkTrip(){
+    const km = parseFloat($('tKm').value); const out=$('tResult');
+    if(!(km>0)){ out.innerHTML='<p class="mn" style="margin-top:10px">Enter a destination or a distance first.</p>'; return; }
+    const purpose=$('tPurpose').value, stay=$('tStay').value;
+    let ok = km >= MARHALAH_KM && purpose==='ok';
+    let head, body=[];
+    if(purpose==='sin'){ head='Not eligible'; body.push('Jamak and qasar are a concession (rukhsah) for permissible travel. They do not apply to a journey made for a sinful purpose.'); }
+    else if(km < MARHALAH_KM){ head='Not eligible'; body.push(`At about ${Math.round(km)} km, the trip is under 2 marhalah (${MARHALAH_KM} km). Pray each prayer in full and on time.`); }
+    else {
+      head='Eligible';
+      body.push(`At about ${Math.round(km)} km, the trip is over 2 marhalah (${MARHALAH_KM} km), so you may jamak and qasar once you have left your town or village area.`);
+      if(km < 90) body.push('Note: this is close to the limit. 81 km is gazetted in Johor and Perak and used by Pejabat Mufti WP, but one Mufti WP article calculates 2 marhalah as about 89 to 90 km. If unsure, follow your state’s fatwa.');
+      if(stay==='short') body.push('At the destination you may continue for up to 3 full days, not counting the day you arrive and the day you leave.');
+      if(stay==='long') body.push('Because you intend to stay 4 full days or more, you may only jamak and qasar on the way there. From the moment you arrive, pray in full until you set off home.');
+      if(stay==='unsure') body.push('If you do not know how long your business will take, you may continue for up to 18 days (not counting arrival and departure days), as long as you intend to leave once it is done.');
+      body.push('On the way back you may jamak and qasar again until you re-enter your home area.');
+    }
+    const rules = ok ? `<div class="gh" style="margin-top:12px">How to do it</div><ol class="ol">
+      <li>Qasar: shorten the 4-rakaat prayers (Zohor, Asar, Isyak) to 2 rakaat. Subuh and Maghrib stay as they are.</li>
+      <li>Jamak: combine Zohor with Asar, and Maghrib with Isyak.</li>
+      <li>Jamak taqdim (in the earlier prayer’s time): pray the earlier one first, intend jamak in that first prayer, and pray the second straight after.</li>
+      <li>Jamak takhir (in the later prayer’s time): intend to delay while the first prayer’s time is still in, and still be travelling when you pray them.</li>
+      <li>Once you are home, pray normally.</li></ol>` : '';
+    out.innerHTML = `<div class="res ${ok?'ok':'no'}"><b>${head}</b>${body.map(b=>`<p>${b}</p>`).join('')}</div>${rules}
+      <p class="mn" style="margin-top:8px">This is a guide based on Shafi’i rulings used in Malaysia, not a fatwa. Each state’s Jabatan Mufti has the final say.</p>
+      ${srcHtml(['kafi255','kafi1177','kafi1181','kafi1197','kafi1690','perak81','johor81'])}`;
+  }
+  function wireTravel(){
+    $('tFrom').onchange = () => $('tHome').classList.toggle('hide', $('tFrom').value!=='town');
+    $('tFind').onclick = findTrip;
+    $('tDest').onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); findTrip(); } };
+    $('tCheck').onclick = checkTrip;
   }
 
   // ---------------- surah detail + audio ----------------
@@ -218,13 +439,13 @@
   async function vSurah(ref){
     const s = SURAHS.find(x=>x.ref===ref);
     root.innerHTML = seg() + `<div class="card"><button class="lnk" data-v="surahs">‹ All surahs</button>
-      <div style="margin-top:6px"><b style="font-size:20px">${s.name}</b><div class="mn">${s.en}</div></div>
+      <div style="margin-top:6px"><b style="font-size:20px">${s.name}</b><div class="mn">${s.en} · ${s.ayat} ayat</div></div>
       <div class="ctl"><button class="pri" id="playAll">▶ Play all</button></div>
-      <div class="lang"><button data-l="en">English</button><button data-l="ms">Bahasa Melayu</button></div>
+      <div class="lang"><button data-l="ms">Bahasa Melayu (JAKIM)</button><button data-l="en">English</button></div>
       <div id="ayahs"><p class="mn" style="margin-top:12px">Loading…</p></div></div>`;
     let d;
     try{ d = await loadSurah(ref); }catch(e){ $('ayahs').innerHTML='<p class="mn" style="margin-top:12px">Could not load this surah. Connect to the internet once to download it.</p>'; return; }
-    const lang = store.get('trLang') || 'en';
+    const lang = store.get('trLang') || 'ms';
     document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on', b.dataset.l===lang));
     const BISM = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
     let html = '';
@@ -245,12 +466,14 @@
 
   function render(){
     stopAudio();
-    const body = view==='types'?vTypes():view==='howto'?vHowto():view==='wudhu'?vWudhu():vSurahs();
-    root.innerHTML = seg() + body;
+    const V = {types:vTypes, howto:vHowto, wudhu:vWudhu, rukun:vRukun, surahs:vSurahs, travel:vTravel};
+    root.innerHTML = seg() + (V[view]||vTypes)();
+    if(view==='travel') wireTravel();
   }
   root.addEventListener('click', e => {
     const v = e.target.closest('[data-v]'); if(v){ view = v.dataset.v; render(); window.scrollTo(0,0); return; }
-    const s = e.target.closest('[data-s]'); if(s){ view='surah'; stopAudio(); vSurah(s.dataset.s); window.scrollTo(0,0); }
+    const s = e.target.closest('[data-s]'); if(s){ view='surah'; stopAudio(); vSurah(s.dataset.s); window.scrollTo(0,0); return; }
+    const k = e.target.closest('[data-k]'); if(k){ view='sunat'; stopAudio(); root.innerHTML = seg() + vSunat(k.dataset.k); window.scrollTo(0,0); }
   });
   document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopAudio(); });
   render();
