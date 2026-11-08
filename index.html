@@ -8,20 +8,24 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Prayer">
 <meta name="theme-color" content="#0b1f1a">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230b1f1a'/%3E%3Cpath d='M112 40a52 52 0 1 0 0 100a42 42 0 1 1 0-100z' fill='%23e8c66a'/%3E%3Ccircle cx='120' cy='72' r='9' fill='%23e8c66a'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-180.png">
 <title>Prayer Times & Qibla</title>
 <style>
-  :root{--bg:#0b1f1a;--card:#12302a;--line:#1f4a40;--txt:#eef5f2;--mut:#9fbdb4;--acc:#e8c66a;--ok:#5fd39a}
+  :root{--bg:#0b1f1a;--card:#12302a;--line:#1f4a40;--txt:#eef5f2;--mut:#9fbdb4;--acc:#e8c66a;--ok:#5fd39a;--warn:#ffb86b}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);
        padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 24px);min-height:100vh;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:440px;margin:0 auto}
+  .wrap{max-width:460px;margin:0 auto}
   header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:14px}
   h1{font-size:15px;font-weight:600;color:var(--mut);letter-spacing:.3px}
   .loc{font-size:20px;font-weight:700;margin-top:2px;line-height:1.25}
   .sub{font-size:13px;color:var(--mut);margin-top:3px}
-  button{font:inherit;border:0;border-radius:12px;padding:10px 14px;background:var(--line);color:var(--txt);font-weight:600;cursor:pointer}
+  .hbtns{display:flex;gap:8px;flex-shrink:0}
+  button,select{font:inherit;border:0;border-radius:12px;padding:10px 14px;background:var(--line);color:var(--txt);font-weight:600;cursor:pointer}
   button.pri{background:var(--acc);color:#1b1404}
+  select{width:100%;font-size:16px;-webkit-appearance:none;appearance:none}
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
   .next{text-align:center}
   .next .lbl{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
@@ -34,8 +38,11 @@
   .times li .t{font-variant-numeric:tabular-nums;font-weight:700}
   .times li.cur{color:var(--acc)}
   .times li.past{opacity:.5}
+  .times li.extra{font-size:14px;color:var(--mut);padding:8px 4px}
+  .times li.extra .t{font-weight:600}
+  .times li.extra small{font-size:11px;opacity:.8;margin-left:6px}
   .tabs{display:flex;gap:8px;margin-bottom:14px}
-  .tabs button{flex:1}
+  .tabs button{flex:1;padding:10px 6px}
   .tabs button.on{background:var(--acc);color:#1b1404}
   .compass{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:8px auto 12px}
   .rose{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%}
@@ -44,11 +51,23 @@
   .qdeg{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
   .status{margin-top:6px;font-size:15px;color:var(--mut);min-height:22px}
   .status.ok{color:var(--ok);font-weight:700}
+  .acc{display:inline-block;margin-top:8px;font-size:13px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--mut)}
+  .acc.good{color:var(--ok)} .acc.fair{color:var(--acc)} .acc.poor{color:var(--warn);background:#3a2a17}
   .note{font-size:12px;color:var(--mut);line-height:1.5;margin-top:10px}
   .err{background:#3a1b1b;border-color:#6a2d2d;color:#ffd9d9;font-size:14px;line-height:1.5}
-  .src{font-size:12px;color:var(--mut);text-align:center;margin-top:8px}
+  .src{font-size:12px;color:var(--mut);text-align:center;margin-top:8px;line-height:1.5}
   .hide{display:none!important}
-  .center{text-align:center}
+  .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .mhead b{font-size:17px}
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;padding:6px 2px;text-align:center;position:sticky;top:0;background:var(--card)}
+  td{padding:8px 2px;text-align:center;border-top:1px solid var(--line)}
+  td:first-child{text-align:left;font-weight:700;padding-left:4px}
+  tr.today td{background:#2a4a33;color:var(--acc);font-weight:700}
+  tr.fri td:first-child{color:var(--ok)}
+  .zone label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px}
+  .zone .row{display:flex;gap:8px;margin-top:10px}
+  .zone .row button{flex:1}
 </style>
 </head>
 <body>
@@ -59,17 +78,28 @@
       <div class="loc" id="loc">Finding your location…</div>
       <div class="sub" id="date"></div>
     </div>
-    <button id="refresh" aria-label="Refresh location">↻</button>
+    <div class="hbtns">
+      <button id="zoneBtn" aria-label="Choose zone">📍</button>
+      <button id="refresh" aria-label="Refresh">↻</button>
+    </div>
   </header>
+
+  <div class="card zone hide" id="zonePanel">
+    <label for="zoneSel">Prayer time zone</label>
+    <select id="zoneSel"><option value="auto">Automatic (use my GPS location)</option></select>
+    <div class="note" id="zoneNote">Pick a zone manually if GPS puts you in the wrong one, or to check another area. The Qibla compass always uses your actual GPS location.</div>
+    <div class="row"><button id="zoneCancel">Cancel</button><button class="pri" id="zoneSave">Save</button></div>
+  </div>
 
   <div class="card err hide" id="err"></div>
 
   <div class="tabs">
-    <button class="on" data-tab="solat">Prayer Times</button>
-    <button data-tab="kiblat">Qibla</button>
+    <button class="on" data-tab="today">Today</button>
+    <button data-tab="month">Month</button>
+    <button data-tab="qibla">Qibla</button>
   </div>
 
-  <section id="tab-solat">
+  <section id="tab-today">
     <div class="card next">
       <div class="lbl">Next prayer</div>
       <div class="name" id="nextName">–</div>
@@ -80,7 +110,18 @@
     <div class="src" id="src"></div>
   </section>
 
-  <section id="tab-kiblat" class="hide">
+  <section id="tab-month" class="hide">
+    <div class="card">
+      <div class="mhead"><b id="mTitle">–</b><span class="sub" id="mZone"></span></div>
+      <table>
+        <thead><tr><th>Date</th><th>Fajr</th><th>Rise</th><th>Dhuhr</th><th>Asr</th><th>Mgrb</th><th>Isha</th></tr></thead>
+        <tbody id="mBody"></tbody>
+      </table>
+      <p class="note">Times in 12-hour format. Dhuhr to Isha are afternoon and evening. Fridays are in green.</p>
+    </div>
+  </section>
+
+  <section id="tab-qibla" class="hide">
     <div class="card">
       <div class="compass">
         <div class="fixed"></div>
@@ -103,9 +144,10 @@
         <div class="qdeg" id="qdeg">–°</div>
         <div class="sub">Qibla bearing from North</div>
         <div class="status" id="qstatus"></div>
-        <button class="pri" id="compassBtn" style="margin-top:12px">Enable compass</button>
+        <div class="acc hide" id="acc"></div>
+        <div><button class="pri" id="compassBtn" style="margin-top:12px">Enable compass</button></div>
       </div>
-      <p class="note">Hold your phone flat. Turn until the Kaaba icon sits under the white arrow at the top. If the reading jumps around, move away from metal and electronics and wave the phone in a figure 8 to calibrate.</p>
+      <p class="note">Hold your phone flat. Turn until the Kaaba icon sits under the white arrow at the top. If accuracy shows Low, move away from metal and electronics and wave the phone in a figure 8 a few times.</p>
     </div>
   </section>
 </div>
@@ -114,31 +156,33 @@
 (() => {
   const KAABA = { lat: 21.4225, lng: 39.8262 };
   const TZ = 'Asia/Kuala_Lumpur';
-  const NAMES = [
-    ['fajr','Fajr'],['syuruk','Sunrise'],['dhuhr','Dhuhr'],
-    ['asr','Asr'],['maghrib','Maghrib'],['isha','Isha']
-  ];
+  const API = 'https://api.waktusolat.app';
+  const MAIN = [['fajr','Fajr'],['syuruk','Sunrise'],['dhuhr','Dhuhr'],['asr','Asr'],['maghrib','Maghrib'],['isha','Isha']];
+  const IMSAK_MIN = 10;   // JAKIM: Imsak is 10 minutes before Subuh
+  const DHUHA_MIN = 25;   // JAKIM almanac: Dhuha starts 25 minutes after Syuruk (some states differ)
+  const HIJRI_M=['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
   const $ = id => document.getElementById(id);
   const store = {
     get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
     set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
   };
 
-  let today = null;    // {fajr: Date, ...}
-  let tomorrowFajr = null;
-  let qibla = null;
+  let today=null, tomorrowFajr=null, qibla=null, monthRows=[], monthMeta={};
 
   // ---------- helpers ----------
   const fmt = d => d.toLocaleTimeString('en-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ});
+  const fmtShort = d => d.toLocaleTimeString('en-MY',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:TZ}).replace(/\s?[ap]\.?m\.?/i,'');
+  const addMin = (d,m) => new Date(d.getTime()+m*60000);
   const myParts = (d=new Date()) => {
     const p = new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);
     const g = t => +p.find(x=>x.type===t).value;
     return { y:g('year'), m:g('month'), d:g('day') };
   };
+  const fmtHijri = h => { const m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(h||''); return m ? `${+m[3]} ${HIJRI_M[+m[2]-1]} ${m[1]} AH` : (h||''); };
   function showErr(msg){ const e=$('err'); e.textContent=msg; e.classList.remove('hide'); }
   function clearErr(){ $('err').classList.add('hide'); }
 
-  // ---------- Qiblat ----------
+  // ---------- Qibla ----------
   function qiblaBearing(lat,lng){
     const r = x => x*Math.PI/180, d = x => x*180/Math.PI;
     const φ = r(lat), φk = r(KAABA.lat), Δλ = r(KAABA.lng - lng);
@@ -174,17 +218,13 @@
     };
     let t = {fajr:5,syuruk:6,dhuhr:12,asr:13,maghrib:18,isha:18};
     for(let i=0;i<2;i++){
-      t = {
-        fajr: hourAngle(20,t.fajr,true), syuruk: hourAngle(0.833,t.syuruk,true),
-        dhuhr: noon(t.dhuhr), asr: asrT(t.asr),
-        maghrib: hourAngle(0.833,t.maghrib,false), isha: hourAngle(18,t.isha,false)
-      };
+      t = { fajr: hourAngle(20,t.fajr,true), syuruk: hourAngle(0.833,t.syuruk,true), dhuhr: noon(t.dhuhr),
+            asr: asrT(t.asr), maghrib: hourAngle(0.833,t.maghrib,false), isha: hourAngle(18,t.isha,false) };
     }
     const adj = {fajr:2,syuruk:-2,dhuhr:2,asr:2,maghrib:2,isha:2};
     const out = {};
     for(const k in t){
-      const local = t[k] + (tz - lng/15) + adj[k]/60;
-      const mins = Math.round(local*60);
+      const mins = Math.round((t[k] + (tz - lng/15) + adj[k]/60)*60);
       out[k] = new Date(Date.UTC(y,m-1,dd,0,mins) - tz*3600000);
     }
     return out;
@@ -196,61 +236,90 @@
     try{ const r = await fetch(url,{signal:ctl.signal}); if(!r.ok) throw new Error(r.status); return await r.json(); }
     finally{ clearTimeout(to); }
   }
-  const toDate = v => {
-    if(v==null) return null;
-    if(typeof v==='number') return new Date(v < 1e12 ? v*1000 : v);
-    return new Date(v);
-  };
-  async function getZoneName(code){
+  const toDate = v => v==null ? null : (typeof v==='number' ? new Date(v < 1e12 ? v*1000 : v) : new Date(v));
+  async function getZones(){
     let zones = store.get('zones');
-    if(!zones){ try{ zones = await fetchJson('https://api.waktusolat.app/zones'); store.set('zones',zones); }catch(e){ return null; } }
-    const z = Array.isArray(zones) ? zones.find(z=>(z.jakimCode||z.code)===code) : null;
+    if(!zones){ try{ zones = await fetchJson(`${API}/zones`); if(Array.isArray(zones)) store.set('zones',zones); }catch(e){ return []; } }
+    return Array.isArray(zones) ? zones : [];
+  }
+  async function zoneName(code){
+    const z = (await getZones()).find(z=>(z.jakimCode||z.code)===code);
     return z ? `${z.daerah}, ${z.negeri}` : null;
   }
-  async function loadFromApi(lat,lng){
+  async function loadMonth(zoneSetting, lat, lng){
     const {y,m} = myParts();
-    const data = await fetchJson(`https://api.waktusolat.app/v2/solat/gps/${lat.toFixed(4)}/${lng.toFixed(4)}`);
+    const url = zoneSetting==='auto'
+      ? `${API}/v2/solat/gps/${lat.toFixed(4)}/${lng.toFixed(4)}`
+      : `${API}/v2/solat/${zoneSetting}`;
+    const data = await fetchJson(url);
     if(!data || !Array.isArray(data.prayers)) throw new Error('format');
     store.set(`month:${data.zone}:${y}-${m}`, data);
-    store.set('last', {zone:data.zone, lat, lng, y, m});
+    store.set('lastZone', data.zone);
     return data;
   }
-  function pickDay(data, day){
+  function dayFromData(data, day){
     const p = data.prayers.find(x=>+x.day===day) || data.prayers[day-1];
     if(!p) return null;
-    const o = {}; NAMES.forEach(([k])=>o[k]=toDate(p[k]));
+    const o = {}; MAIN.forEach(([k])=>o[k]=toDate(p[k]));
+    o.imsak = toDate(p.imsak); o.dhuha = toDate(p.dhuha);
     o.hijri = p.hijri || '';
     return o;
   }
 
-  // ---------- render ----------
+  // ---------- render: today ----------
   function render(){
     if(!today) return;
     const now = new Date();
     let nextKey=null, curKey=null;
-    for(const [k] of NAMES){ if(today[k] > now){ nextKey=k; break; } curKey=k; }
+    for(const [k] of MAIN){ if(today[k] > now){ nextKey=k; break; } curKey=k; }
+    const rows = [
+      {k:'imsak', label:'Imsak', t:today.imsak || addMin(today.fajr,-IMSAK_MIN), extra:true},
+      ...MAIN.slice(0,2).map(([k,l])=>({k,label:l,t:today[k]})),
+      {k:'dhuha', label:'Dhuha', t:today.dhuha || addMin(today.syuruk,DHUHA_MIN), extra:true, note: today.dhuha ? '' : 'approx.'},
+      ...MAIN.slice(2).map(([k,l])=>({k,label:l,t:today[k]}))
+    ];
     const ul = $('times'); ul.innerHTML='';
-    NAMES.forEach(([k,label])=>{
+    rows.forEach(r=>{
       const li=document.createElement('li');
-      if(k===curKey && k!=='syuruk') li.className='cur';
-      else if(today[k] <= now) li.className='past';
-      li.innerHTML=`<span>${label}</span><span class="t">${fmt(today[k])}</span>`;
+      const cls=[];
+      if(r.extra) cls.push('extra');
+      else if(r.k===curKey && r.k!=='syuruk') cls.push('cur');
+      if(!cls.includes('cur') && r.t <= now) cls.push('past');
+      li.className=cls.join(' ');
+      li.innerHTML=`<span>${r.label}${r.note?`<small>${r.note}</small>`:''}</span><span class="t">${fmt(r.t)}</span>`;
       ul.appendChild(li);
     });
     let target, name;
-    if(nextKey){ target=today[nextKey]; name=NAMES.find(n=>n[0]===nextKey)[1]; }
+    if(nextKey){ target=today[nextKey]; name=MAIN.find(n=>n[0]===nextKey)[1]; }
     else { target=tomorrowFajr; name='Fajr (tomorrow)'; }
     $('nextName').textContent=name;
     $('nextAt').textContent=target?fmt(target):'';
     if(target){
-      let s=Math.max(0,Math.floor((target-now)/1000));
-      const h=Math.floor(s/3600), mi=Math.floor(s%3600/60), se=s%60;
-      $('nextCd').textContent=[h,mi,se].map(v=>String(v).padStart(2,'0')).join(':');
-      if(s===0) setTimeout(()=>start(true), 1500);
+      const s=Math.max(0,Math.floor((target-now)/1000));
+      $('nextCd').textContent=[Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(v=>String(v).padStart(2,'0')).join(':');
+      if(s===0) setTimeout(()=>start(), 1500);
     }
   }
-  const HIJRI_M=['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
-  function fmtHijri(h){ const m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(h); return m ? `${+m[3]} ${HIJRI_M[+m[2]-1]} ${m[1]} AH` : h; }
+
+  // ---------- render: month ----------
+  function renderMonth(){
+    const {y,m,d} = myParts();
+    $('mTitle').textContent = new Date(Date.UTC(y,m-1,15)).toLocaleDateString('en-GB',{month:'long',year:'numeric',timeZone:'UTC'});
+    $('mZone').textContent = monthMeta.zone ? `Zone ${monthMeta.zone}` : (monthMeta.estimate ? 'Estimate' : '');
+    const tb=$('mBody'); tb.innerHTML='';
+    monthRows.forEach(r=>{
+      const tr=document.createElement('tr');
+      const dow = new Date(Date.UTC(y,m-1,r.day)).getUTCDay();
+      if(r.day===d) tr.className='today'; else if(dow===5) tr.className='fri';
+      const wd = ['Su','Mo','Tu','We','Th','Fr','Sa'][dow];
+      tr.innerHTML = `<td>${r.day} <span style="font-weight:400;opacity:.7">${wd}</span></td>` +
+        MAIN.map(([k])=>`<td>${r[k]?fmtShort(r[k]):'–'}</td>`).join('');
+      tb.appendChild(tr);
+    });
+    const todayRow = tb.querySelector('tr.today');
+    if(todayRow && !$('tab-month').classList.contains('hide')) todayRow.scrollIntoView({block:'center'});
+  }
+
   function setDateLine(hijri){
     const g = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:TZ});
     $('date').textContent = hijri ? `${g} · ${fmtHijri(hijri)}` : g;
@@ -264,59 +333,92 @@
     });
   }
 
+  let running=false;
   async function start(){
+    if(running) return; running=true;
+    try{ await run(); } finally { running=false; }
+  }
+  async function run(){
     clearErr();
+    const zoneSetting = store.get('zoneSetting') || 'auto';
     $('loc').textContent='Finding your location…';
-    let lat,lng;
+
+    let lat=null,lng=null;
     try{
-      const c = await getPosition(); lat=c.latitude; lng=c.longitude;
-      store.set('pos',{lat,lng});
+      const c = await getPosition(); lat=c.latitude; lng=c.longitude; store.set('pos',{lat,lng});
     }catch(e){
       const p = store.get('pos');
-      if(p){ lat=p.lat; lng=p.lng; showErr('Could not read your current location, so the last known location is used. Check that Location Services is allowed for Safari.'); }
-      else { $('loc').textContent='Location unavailable'; showErr('Please allow location access: Settings > Privacy & Security > Location Services > Safari Websites > While Using the App.'); return; }
+      if(p){ lat=p.lat; lng=p.lng; if(zoneSetting==='auto') showErr('Could not read your current location, so your last known location is used. Check that Location Services is allowed for Safari.'); }
+      else if(zoneSetting==='auto'){ $('loc').textContent='Location unavailable'; showErr('Please allow location access (Settings > Privacy & Security > Location Services > Safari Websites > While Using the App), or tap 📍 to choose your zone manually.'); return; }
     }
 
-    qibla = qiblaBearing(lat,lng);
-    $('qdeg').textContent = qibla.toFixed(1)+'°';
-    $('needle').setAttribute('transform',`rotate(${qibla} 150 150)`);
+    if(lat!=null){
+      qibla = qiblaBearing(lat,lng);
+      $('qdeg').textContent = qibla.toFixed(1)+'°';
+      $('needle').setAttribute('transform',`rotate(${qibla} 150 150)`);
+    }else{
+      $('qdeg').textContent='–°'; $('qstatus').textContent='Allow location access to show the Qibla.';
+    }
 
     const {y,m,d} = myParts();
     const tm = myParts(new Date(Date.now()+86400000));
-    let source='', data=null;
+    let source='', data=null, offline=false;
     try{
-      data = await loadFromApi(lat,lng);
-      source = `Source: JAKIM e-Solat (zone ${data.zone}) via waktusolat.app`;
+      data = await loadMonth(zoneSetting, lat, lng);
     }catch(e){
-      const last = store.get('last');
-      if(last && last.y===y && last.m===m){
-        data = store.get(`month:${last.zone}:${y}-${m}`);
-        if(data) source = `Source: JAKIM (zone ${data.zone}, saved offline copy)`;
-      }
+      const code = zoneSetting==='auto' ? store.get('lastZone') : zoneSetting;
+      if(code){ data = store.get(`month:${code}:${y}-${m}`); offline = !!data; }
     }
 
-    if(data && pickDay(data,d)){
-      today = pickDay(data,d);
-      const nextDay = (tm.m===m) ? pickDay(data,tm.d) : null;
-      tomorrowFajr = nextDay ? nextDay.fajr : calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr;
+    if(data && dayFromData(data,d)){
+      today = dayFromData(data,d);
+      const nd = (tm.m===m) ? dayFromData(data,tm.d) : null;
+      tomorrowFajr = nd ? nd.fajr : (lat!=null ? calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr : null);
+      monthRows = data.prayers.map(p=>{ const o={day:+p.day}; MAIN.forEach(([k])=>o[k]=toDate(p[k])); return o; });
+      monthMeta = {zone:data.zone};
+      source = `Source: JAKIM e-Solat (zone ${data.zone}${zoneSetting==='auto'?', from GPS':', chosen manually'})${offline?' · saved offline copy':' via waktusolat.app'}`;
       setDateLine(today.hijri);
-      const name = await getZoneName(data.zone);
-      $('loc').textContent = name || `Zone ${data.zone}`;
-    }else{
+      $('loc').textContent = (await zoneName(data.zone)) || `Zone ${data.zone}`;
+    }else if(lat!=null){
       today = calcTimes(y,m,d,lat,lng);
       tomorrowFajr = calcTimes(tm.y,tm.m,tm.d,lat,lng).fajr;
+      const days = new Date(Date.UTC(y,m,0)).getUTCDate();
+      monthRows = Array.from({length:days},(_,i)=>({day:i+1,...calcTimes(y,m,i+1,lat,lng)}));
+      monthMeta = {estimate:true};
       source = 'Estimated by calculation (no internet). May differ from JAKIM by a few minutes.';
       setDateLine('');
       $('loc').textContent = `${lat.toFixed(3)}, ${lng.toFixed(3)}`;
+    }else{
+      $('loc').textContent='No data'; showErr('No internet and no saved times for this zone yet. Connect once to download this month.');
+      return;
     }
     $('src').textContent = source;
-    render();
+    render(); renderMonth();
   }
 
+  // ---------- zone picker ----------
+  async function openZones(){
+    const sel=$('zoneSel'), panel=$('zonePanel');
+    panel.classList.remove('hide');
+    if(sel.options.length<=1){
+      const zones = await getZones();
+      if(!zones.length){ $('zoneNote').textContent='Could not load the zone list. Check your internet connection and try again.'; }
+      const byState = {};
+      zones.forEach(z=>{ (byState[z.negeri] ||= []).push(z); });
+      Object.keys(byState).sort().forEach(st=>{
+        const og=document.createElement('optgroup'); og.label=st;
+        byState[st].forEach(z=>{ const o=document.createElement('option'); o.value=z.jakimCode; o.textContent=`${z.jakimCode} · ${z.daerah}`; og.appendChild(o); });
+        sel.appendChild(og);
+      });
+    }
+    sel.value = store.get('zoneSetting') || 'auto';
+  }
+  $('zoneBtn').addEventListener('click',()=>{ $('zonePanel').classList.contains('hide') ? openZones() : $('zonePanel').classList.add('hide'); });
+  $('zoneCancel').addEventListener('click',()=>$('zonePanel').classList.add('hide'));
+  $('zoneSave').addEventListener('click',()=>{ store.set('zoneSetting',$('zoneSel').value); $('zonePanel').classList.add('hide'); start(); });
+
   // ---------- compass (smoothed with requestAnimationFrame) ----------
-  let heading=null;      // latest raw sensor heading
-  let shown=null;        // smoothed, unwrapped angle currently drawn
-  let aligned=false, lastText='';
+  let heading=null, shown=null, aligned=false, lastText='', accLevel='', lastFrame=0;
   const rose=$('rose');
   const wrap180 = a => ((a % 360) + 540) % 360 - 180;
   function onOrient(e){
@@ -325,8 +427,14 @@
     else if(e.absolute && typeof e.alpha==='number') h = (360 - e.alpha)%360;           // Android
     if(h==null || isNaN(h)) return;
     heading = h;
+    if(typeof e.webkitCompassAccuracy==='number') setAccuracy(e.webkitCompassAccuracy);
   }
-  let lastFrame=0;
+  function setAccuracy(a){
+    const lvl = (a<0 || a>25) ? 'poor' : (a>10 ? 'fair' : 'good');
+    if(lvl===accLevel) return; accLevel=lvl;
+    const el=$('acc'); el.classList.remove('hide'); el.className='acc '+lvl;
+    el.textContent = lvl==='good' ? 'Accuracy: Good' : lvl==='fair' ? 'Accuracy: Fair (within about 25°)' : 'Accuracy: Low. Wave phone in a figure 8';
+  }
   function frame(ts){
     requestAnimationFrame(frame);
     if(heading==null) return;
@@ -334,8 +442,7 @@
     if(shown==null) shown = heading;
     const diff = wrap180(heading - shown);
     if(Math.abs(diff) > 0.15){
-      const k = 1 - Math.exp(-dt/90);   // ~90ms time constant: smooth but responsive
-      shown += diff * k;
+      shown += diff * (1 - Math.exp(-dt/90));
       rose.style.transform = `rotate(${-shown}deg)`;
     }
     if(qibla!=null){
@@ -361,26 +468,27 @@
   }
 
   // ticks
-  const tg=$('ticks'); let s='';
+  let s='';
   for(let a=0;a<360;a+=10){
-    const big=a%30===0, r1=142, r2=big?124:132;
-    const x1=150+r1*Math.sin(a*Math.PI/180), y1=150-r1*Math.cos(a*Math.PI/180);
-    const x2=150+r2*Math.sin(a*Math.PI/180), y2=150-r2*Math.cos(a*Math.PI/180);
-    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#9fbdb4" stroke-width="${big?3:1.5}"/>`;
+    const big=a%30===0, r1=142, r2=big?124:132, sn=Math.sin(a*Math.PI/180), cs=Math.cos(a*Math.PI/180);
+    s+=`<line x1="${150+r1*sn}" y1="${150-r1*cs}" x2="${150+r2*sn}" y2="${150-r2*cs}" stroke="#9fbdb4" stroke-width="${big?3:1.5}"/>`;
   }
-  tg.innerHTML=s;
+  $('ticks').innerHTML=s;
 
   // tabs
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-    $('tab-solat').classList.toggle('hide',b.dataset.tab!=='solat');
-    $('tab-kiblat').classList.toggle('hide',b.dataset.tab!=='kiblat');
+    ['today','month','qibla'].forEach(t=>$('tab-'+t).classList.toggle('hide',b.dataset.tab!==t));
+    if(b.dataset.tab==='month'){ const r=$('mBody').querySelector('tr.today'); if(r) r.scrollIntoView({block:'center'}); }
   }));
   $('compassBtn').addEventListener('click',enableCompass);
   $('refresh').addEventListener('click',()=>start());
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) start(); });
 
-  window.__test = {calcTimes, qiblaBearing};
+  // offline support
+  if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+
+  window.__test = {calcTimes, qiblaBearing, fmtHijri};
   setDateLine('');
   start();
   setInterval(render,1000);
