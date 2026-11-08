@@ -9,11 +9,11 @@ REFRESH-INTERVAL;VALUE=DURATION:P7D
 X-PUBLISHED-TTL:P7D
 BEGIN:VEVENT
 UID:2026-12-11-awalrejab@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20261211
 DTEND;VALUE=DATE:20261212
 SUMMARY:Awal Rejab
-DESCRIPTION:1 Rejab 1448. Start of the sacred month of Rejab. Estimated date; subject to JAKIM moon sighting.
+DESCRIPTION:1 Rejab 1448. Start of the sacred month of Rejab. Estimated date\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -23,11 +23,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-06-israkmikraj@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270106
 DTEND;VALUE=DATE:20270107
 SUMMARY:Israk & Mikraj
-DESCRIPTION:27 Rejab 1448. State holiday: Kedah\, Negeri Sembilan\, Perlis\, Terengganu. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:27 Rejab 1448. State holiday: Kedah\, Negeri Sembilan\, Perlis\, Terengganu. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -37,11 +37,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-23-nisfusyaaban@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270123
 DTEND;VALUE=DATE:20270124
 SUMMARY:Nisfu Syaaban
-DESCRIPTION:15 Syaaban 1448. Night of mid-Syaaban (evening before). Estimated date; subject to JAKIM moon sighting.
+DESCRIPTION:15 Syaaban 1448. Night of mid-Syaaban (evening before). Estimated date\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -51,11 +51,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-08-awalramadan@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270208
 DTEND;VALUE=DATE:20270209
 SUMMARY:Awal Ramadan
-DESCRIPTION:1 Ramadan 1448. First day of fasting. State holiday: Johor\, Kedah\, Melaka. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:1 Ramadan 1448. First day of fasting. State holiday: Johor\, Kedah\, Melaka. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -65,11 +65,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-24-nuzulalquran@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270224
 DTEND;VALUE=DATE:20270225
 SUMMARY:Nuzul Al-Quran
-DESCRIPTION:17 Ramadan 1448. State holiday in most states\, not Johor\, Kedah\, Melaka\, N. Sembilan\, Sabah\, Sarawak. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:17 Ramadan 1448. State holiday in most states\, not Johor\, Kedah\, Melaka\, N. Sembilan\, Sabah\, Sarawak. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -79,11 +79,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-28-last10nightsoframadan@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270228
 DTEND;VALUE=DATE:20270301
 SUMMARY:Last 10 nights of Ramadan
-DESCRIPTION:21 Ramadan 1448. Seek Lailatul Qadar. Estimated date; subject to JAKIM moon sighting.
+DESCRIPTION:21 Ramadan 1448. Seek Lailatul Qadar. Estimated date\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -93,11 +93,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-03-10-harirayaaidilfitri@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270310
 DTEND;VALUE=DATE:20270311
 SUMMARY:Hari Raya Aidilfitri
-DESCRIPTION:1 Syawal 1448. National holiday (Day 1). Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:1 Syawal 1448. National holiday (Day 1). Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -107,11 +107,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-03-11-harirayaaidilfitriday2@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270311
 DTEND;VALUE=DATE:20270312
 SUMMARY:Hari Raya Aidilfitri (Day 2)
-DESCRIPTION:2 Syawal 1448. National holiday. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:2 Syawal 1448. National holiday. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -121,11 +121,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-05-16-hariarafah@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270516
 DTEND;VALUE=DATE:20270517
 SUMMARY:Hari Arafah
-DESCRIPTION:9 Zulhijjah 1448. Recommended day of fasting. State holiday: Kelantan\, Terengganu. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:9 Zulhijjah 1448. Recommended day of fasting. State holiday: Kelantan\, Terengganu. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -135,11 +135,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-05-17-harirayaaidiladhahaji@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270517
 DTEND;VALUE=DATE:20270518
 SUMMARY:Hari Raya Aidiladha (Haji)
-DESCRIPTION:10 Zulhijjah 1448. National holiday. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:10 Zulhijjah 1448. National holiday. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -149,11 +149,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-05-18-harirayaaidiladhaday2@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270518
 DTEND;VALUE=DATE:20270519
 SUMMARY:Hari Raya Aidiladha (Day 2)
-DESCRIPTION:11 Zulhijjah 1448. State holiday: Kedah\, Kelantan\, Perlis\, Terengganu. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:11 Zulhijjah 1448. State holiday: Kedah\, Kelantan\, Perlis\, Terengganu. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -162,12 +162,26 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
+UID:2027-06-05-lastdayof1448ah@nuhihsan.github.io
+DTSTAMP:20261108T171858Z
+DTSTART;VALUE=DATE:20270605
+DTEND;VALUE=DATE:20270606
+SUMMARY:Last day of 1448 AH
+DESCRIPTION:29 Zulhijjah 1448. Read Doa Akhir Tahun after Asar\, before Maghrib (Guide > Doa). Date depends on moon sighting. Estimated date\; subject to JAKIM moon sighting.
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Last day of 1448 AH tomorrow
+TRIGGER:-PT3H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
 UID:2027-06-06-awalmuharrammaalhijrah@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270606
 DTEND;VALUE=DATE:20270607
 SUMMARY:Awal Muharram (Maal Hijrah)
-DESCRIPTION:1 Muharram 1449. National holiday. Islamic New Year 1449. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:1 Muharram 1449. National holiday. Islamic New Year 1449. Doa Awal Tahun is read after Maghrib on the eve\, 5 June (Guide > Doa). Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -177,11 +191,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-06-15-hariasyura@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270615
 DTEND;VALUE=DATE:20270616
 SUMMARY:Hari Asyura
-DESCRIPTION:10 Muharram 1449. Recommended day of fasting (with 9 Muharram). Estimated date; subject to JAKIM moon sighting.
+DESCRIPTION:10 Muharram 1449. Recommended day of fasting (with 9 Muharram). Estimated date\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
@@ -191,11 +205,11 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:2027-08-15-maulidurrasul@nuhihsan.github.io
-DTSTAMP:20261108T152925Z
+DTSTAMP:20261108T171858Z
 DTSTART;VALUE=DATE:20270815
 DTEND;VALUE=DATE:20270816
 SUMMARY:Maulidur Rasul
-DESCRIPTION:12 Rabiulawal 1449. National holiday. Birthday of Prophet Muhammad SAW. Public holiday; subject to JAKIM moon sighting.
+DESCRIPTION:12 Rabiulawal 1449. National holiday. Birthday of Prophet Muhammad SAW. Public holiday\; subject to JAKIM moon sighting.
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY

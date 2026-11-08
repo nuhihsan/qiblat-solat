@@ -48,6 +48,8 @@
     perakRaya: ['Jabatan Mufti Negeri Perak, Panduan Hari Raya', 'https://mufti.Perak.gov.my/images/garis_panduan/GPRaya.pdf'],
     pahangRaya: ['Jabatan Mufti Negeri Pahang, Sunat-sunat Hari Raya', 'https://mufti.pahang.gov.my/wp-content/uploads/2022/04/HARI-RAYA-3.0artikel.pdf'],
     jenazahKKM: ['KKM / HTAR Klang, Panduan Ringkas Solat Jenazah', 'https://jknselangor.moh.gov.my/htar/images/pdf/UHEI/kematian.pdf'],
+    nsDoa: ['Jabatan Mufti Negeri Sembilan, Risalah Do‘a Awal dan Akhir Tahun Hijriyyah 1442H', 'https://muftins.gov.my/wp-content/uploads/2020/08/Risalah-hijriyyah.pdf'],
+    nuDoa: ['NU Online, Lafal doa awal dan akhir tahun (from the kitab Maslakul Akhyar)', 'https://nu.or.id/doa/ini-lafal-doa-awal-dan-akhir-tahun-kj6bh'],
     basmeih: ['Tafsir Pimpinan Ar-Rahman (Abdullah Basmeih), published by JAKIM', 'https://hrmars.com/journals/papers/IJARPED/v14-i2/25006'],
   };
   const srcHtml = keys => `<div class="srcs"><b>Sources</b>${keys.map(k=>{const [t,u]=SRC[k]; return `<a href="${u}" target="_blank" rel="noopener">${t} ↗</a>`;}).join('')}</div>`;
@@ -149,6 +151,20 @@
     ['Rasul','Believing in His messengers.'],
     ['Hari Akhirat','Believing in the Last Day.'],
     ['Qada’ dan Qadar','Believing in divine decree, both the good and the bad.'],
+  ];
+
+
+  // ---------------- Doa for the end and start of the Hijri year ----------------
+  const DOA = [
+    { id:'akhir', t:'Doa Akhir Tahun (end of year)', when:'On the last day of Zulhijjah, after Asar and before Maghrib. Commonly recited 3 times.',
+      ar:"اَللّٰهُمَّ مَا عَمِلْتُ مِنْ عَمَلٍ فِي هٰذِهِ السَّنَةِ مَا نَهَيْتَنِي عَنْهُ وَلَمْ أَتُبْ مِنْهُ وَحَلُمْتَ فِيْها عَلَيَّ بِفَضْلِكَ بَعْدَ قُدْرَتِكَ عَلَى عُقُوْبَتِيْ وَدَعَوْتَنِيْ إِلَى التَّوْبَةِ مِنْ بَعْدِ جَرَاءَتِيْ عَلَى مَعْصِيَتِكَ فَإِنِّي اسْتَغْفَرْتُكَ فَاغْفِرْلِيْ وَمَا عَمِلْتُ فِيْهَا مِمَّا تَرْضَى وَوَعَدْتَّنِي عَلَيْهِ الثَّوَابَ فَأَسْئَلُكَ أَنْ تَتَقَبَّلَ مِنِّيْ وَلَا تَقْطَعْ رَجَائِيْ مِنْكَ يَا كَرِيْمُ",
+      tr:'Allāhumma mā ‘amiltu min ‘amalin fī hādhihis-sanati mā nahaitanī ‘anhu wa lam atub minhu, wa ḥalumta fīhā ‘alayya bi faḍlika ba‘da qudratika ‘alā ‘uqūbatī, wa da‘autanī ilat-taubati min ba‘di jarā’atī ‘alā ma‘ṣiyatik, fa innī istaghfartuka faghfir lī. Wa mā ‘amiltu fīhā mimmā tarḍā wa wa‘adtanī ‘alaihith-thawāb, fa as’aluka an tataqabbala minnī, wa lā taqṭa‘ rajā’ī minka yā Karīm.',
+      m:'O Allah, whatever I did this year that You had forbidden me, and have not yet repented from, while You were patient with me out of Your grace though You had the power to punish me, and You still called me to repent after I dared to disobey You: I seek Your forgiveness, so forgive me. And whatever I did this year that pleases You, for which You promised me reward, I ask You to accept it from me. Do not cut off my hope in You, O Most Generous.' },
+    { id:'awal', t:'Doa Awal Tahun (start of year)', when:'After Maghrib on the night of 1 Muharram, when the new year begins. Commonly recited 3 times.',
+      ar:"اَللّٰهُمَّ أَنْتَ الأَبَدِيُّ القَدِيمُ الأَوَّلُ وَعَلَى فَضْلِكَ العَظِيْمِ وَكَرِيْمِ جُوْدِكَ المُعَوَّلُ، وَهٰذَا عَامٌ جَدِيْدٌ قَدْ أَقْبَلَ، أَسْأَلُكَ العِصْمَةَ فِيْهِ مِنَ الشَّيْطَانِ وَأَوْلِيَائِهِ، وَالعَوْنَ عَلَى هٰذِهِ النَّفْسِ الأَمَّارَةِ بِالسُّوْءِ، وَالاِشْتِغَالَ بِمَا يُقَرِّبُنِيْ إِلَيْكَ زُلْفَى يَا ذَا الجَلَالِ وَالإِكْرَامِ",
+      tr:'Allāhumma antal-abadiyyul-qadīmul-awwal, wa ‘alā faḍlikal-‘aẓīmi wa karīmi jūdikal-mu‘awwal. Wa hādhā ‘āmun jadīdun qad aqbal. As’alukal-‘iṣmata fīhi minash-shaiṭāni wa auliyā’ih, wal-‘auna ‘alā hādhihin-nafsil-ammārati bis-sū’, wal-ishtighāla bimā yuqarribunī ilaika zulfā, yā Dhal-Jalāli wal-Ikrām.',
+      m:'O Allah, You are the Everlasting, the Eternal, the First. On Your immense grace and generous bounty we rely. This new year has arrived. I ask You to protect me in it from Satan and his allies, to help me against this soul that urges me to evil, and to keep me busy with what brings me closer to You, O Possessor of Majesty and Honour.',
+      extra:{ ar:'اللَّهُمَّ يَا مُحَوِّلَ الْأَحْوَالِ حَوِّلْ حَالَنَا إِلَى أَحْسَنِ الْأَحْوَالِ', tr:'Allāhumma yā muḥawwilal-aḥwāl, ḥawwil ḥālanā ilā aḥsanil-aḥwāl.', m:'O Allah, Changer of all conditions, change our condition to the best of conditions.' } },
   ];
 
   // ---------------- surahs (ayah counts per the standard Uthmani mushaf) ----------------
@@ -271,7 +287,7 @@
 
   function seg(){
     const on = k => view===k || (view==='surah'&&k==='surahs') || (view==='sunat'&&k==='types');
-    return `<div class="seg">${[['types','Types'],['howto','How to pray'],['wudhu','Wudhu'],['rukun','Rukun'],['surahs','Surahs'],['travel','Travel']]
+    return `<div class="seg">${[['types','Types'],['howto','How to pray'],['wudhu','Wudhu'],['rukun','Rukun'],['doa','Doa'],['surahs','Surahs'],['travel','Travel']]
       .map(([k,l])=>`<button data-v="${k}" class="${on(k)?'on':''}">${l}</button>`).join('')}</div>`;
   }
   function vTypes(){
@@ -319,6 +335,17 @@
       `<div class="sl" data-s="${s.ref}"><div class="num">${s.ayah?'2:255':s.n}</div><div class="nm"><b>${s.name}</b><div>${s.en} · ${s.ayat} ${s.ayat===1?'ayat':'ayat'}${s.note?` · ${s.note}`:''}</div></div><div class="go">›</div></div>`).join('')}
       <p class="mn" style="margin-top:8px">Arabic text: standard Uthmani script. Malay meaning: Tafsir Pimpinan Ar-Rahman by Abdullah Basmeih, the translation published by JAKIM. English (optional): Sahih International, which is not a JAKIM publication. Recitation by Mishary Rashid Alafasy. Needs internet the first time; text is then saved for offline reading.</p>
       ${srcHtml(['basmeih'])}</div>`;
+  }
+
+  function vDoa(){
+    return DOA.map(d=>`<div class="card"><div class="gh">${d.t}</div>
+      <div class="kv"><span>When</span><div>${d.when}</div></div>
+      <div class="ar" style="margin-top:8px">${d.ar}</div>
+      <div class="tr">${d.tr}</div><div class="mn">${d.m}</div>
+      ${d.extra?`<div class="gh" style="margin-top:14px">Closing line used in Malaysia</div>
+        <div class="ar">${d.extra.ar}</div><div class="tr">${d.extra.tr}</div><div class="mn">${d.extra.m}</div>`:''}
+      </div>`).join('') + `<div class="card"><p class="mn">These doa come from the collection Maslakul Akhyar and are recited in Malaysian mosques at the turn of the Hijri year. They are general supplications rather than a fixed sunnah, so you may also pray in your own words. The English meanings are written for this app. The Malaysian closing line follows the Negeri Sembilan Mufti Department’s booklet.</p>
+      ${srcHtml(['nsDoa','nuDoa'])}</div>`;
   }
 
   // ---------------- Jamak & Qasar checker ----------------
@@ -482,7 +509,7 @@
 
   function render(){
     stopAudio();
-    const V = {types:vTypes, howto:vHowto, wudhu:vWudhu, rukun:vRukun, surahs:vSurahs, travel:vTravel};
+    const V = {types:vTypes, howto:vHowto, wudhu:vWudhu, rukun:vRukun, doa:vDoa, surahs:vSurahs, travel:vTravel};
     root.innerHTML = seg() + (V[view]||vTypes)();
     if(view==='travel') wireTravel();
   }
