@@ -167,11 +167,39 @@
       extra:{ ar:'اللَّهُمَّ يَا مُحَوِّلَ الْأَحْوَالِ حَوِّلْ حَالَنَا إِلَى أَحْسَنِ الْأَحْوَالِ', tr:'Allāhumma yā muḥawwilal-aḥwāl, ḥawwil ḥālanā ilā aḥsanil-aḥwāl.', m:'O Allah, Changer of all conditions, change our condition to the best of conditions.' } },
   ];
 
+
+  // ---------------- Everyday doa ----------------
+  // Quranic doa: Arabic copied from the Uthmani text (api.alquran.cloud). Hadith doa: short, widely taught wording, typed for this app.
+  const DOA_GROUPS = [
+    { h:'After prayer (wirid)', items:[
+      { t:'Istighfar', when:'Straight after salam, 3 times.', ar:'أَسْتَغْفِرُ اللَّهَ', tr:'Astaghfirullāh', m:'I seek forgiveness from Allah.', ref:'Sahih Muslim 591' },
+      { t:'Allāhumma antas-salām', when:'After the istighfar.', ar:'اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ', tr:'Allāhumma antas-salām, wa minkas-salām, tabārakta yā Dhal-Jalāli wal-Ikrām.', m:'O Allah, You are Peace and from You comes peace. Blessed are You, O Possessor of Majesty and Honour.', ref:'Sahih Muslim 591' },
+      { t:'Tasbih, tahmid, takbir', when:'33 times each, then the closing line once. Use the Tasbih counter below.', ar:'سُبْحَانَ اللَّهِ · الْحَمْدُ لِلَّهِ · اللَّهُ أَكْبَرُ', tr:'Subḥānallāh (33) · Alḥamdulillāh (33) · Allāhu akbar (33), then: Lā ilāha illallāhu waḥdahū lā sharīka lah, lahul-mulku wa lahul-ḥamdu wa huwa ‘alā kulli shai’in qadīr.', m:'Glory be to Allah · All praise is for Allah · Allah is the Greatest. Then: There is no god but Allah alone, without partner. His is the dominion and His is the praise, and He has power over all things.', ref:'Sahih Muslim 597' },
+      { t:'Ayat al-Kursi', when:'After each fardhu prayer.', surah:'2:255', ref:'Sunan an-Nasa’i al-Kubra 9848' },
+      { t:'Rabbanā ātinā', when:'A comprehensive doa, often read to close.', ar:"رَبَّنَآ ءَاتِنَا فِى ٱلدُّنْيَا حَسَنَةًۭ وَفِى ٱلْءَاخِرَةِ حَسَنَةًۭ وَقِنَا عَذَابَ ٱلنَّارِ", tr:'Rabbanā ātinā fid-dunyā ḥasanah, wa fil-ākhirati ḥasanah, wa qinā ‘adhāban-nār.', m:'Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.', ref:'Quran, Al-Baqarah 2:201' },
+    ]},
+    { h:'Daily doa', items:[
+      { t:'Before eating', when:'Before the first bite.', ar:'بِسْمِ اللَّهِ', tr:'Bismillāh. If you forgot, say when you remember: Bismillāhi awwalahū wa ākhirah.', m:'In the name of Allah. (If forgotten: In the name of Allah, at its beginning and its end.)', ref:'Sunan Abi Dawud 3767, Jami‘ at-Tirmidhi 1858' },
+      { t:'After eating', when:'When you finish.', ar:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ', tr:'Alḥamdulillāhil-ladhī aṭ‘amanā wa saqānā wa ja‘alanā muslimīn.', m:'All praise is for Allah, who fed us, gave us drink and made us Muslims.', ref:'Sunan Abi Dawud 3850, Jami‘ at-Tirmidhi 3457' },
+      { t:'Leaving the house', when:'As you step out.', ar:'بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', tr:'Bismillāh, tawakkaltu ‘alallāh, wa lā ḥawla wa lā quwwata illā billāh.', m:'In the name of Allah, I rely on Allah, and there is no power or strength except with Allah.', ref:'Sunan Abi Dawud 5095, Jami‘ at-Tirmidhi 3426' },
+      { t:'Riding a vehicle / travelling', when:'When you set off.', ar:"سُبْحَٰنَ ٱلَّذِى سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُۥ مُقْرِنِينَ وَإِنَّآ إِلَىٰ رَبِّنَا لَمُنقَلِبُونَ", tr:'Subḥānal-ladhī sakhkhara lanā hādhā wa mā kunnā lahū muqrinīn, wa innā ilā rabbinā lamunqalibūn.', m:'Glory be to the One who made this subservient to us, for we could not have done it ourselves. And to our Lord we will surely return.', ref:'Quran, Az-Zukhruf 43:13-14; Sahih Muslim 1342' },
+      { t:'Entering the toilet', when:'Before entering (say it outside).', ar:'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ', tr:'Allāhumma innī a‘ūdhu bika minal-khubuthi wal-khabā’ith.', m:'O Allah, I seek refuge in You from evil and evil beings.', ref:'Sahih al-Bukhari 142, Sahih Muslim 375' },
+      { t:'Leaving the toilet', when:'After stepping out.', ar:'غُفْرَانَكَ', tr:'Ghufrānak.', m:'(I ask) Your forgiveness.', ref:'Sunan Abi Dawud 30, Jami‘ at-Tirmidhi 7' },
+      { t:'Before sleeping', when:'Lying down to sleep.', ar:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', tr:'Bismika Allāhumma amūtu wa aḥyā.', m:'In Your name, O Allah, I die and I live.', ref:'Sahih al-Bukhari 6324' },
+      { t:'Waking up', when:'On waking.', ar:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', tr:'Alḥamdulillāhil-ladhī aḥyānā ba‘da mā amātanā wa ilaihin-nushūr.', m:'All praise is for Allah, who gave us life after causing us to die, and to Him is the return.', ref:'Sahih al-Bukhari 6324' },
+    ]},
+    { h:'For parents', items:[
+      { t:'Mercy for parents', when:'Any time, especially after prayer.', ar:"رَّبِّ ٱرْحَمْهُمَا كَمَا رَبَّيَانِى صَغِيرًۭا", tr:'Rabbir-ḥamhumā kamā rabbayānī ṣaghīrā.', m:'My Lord, have mercy on them as they raised me when I was small.', ref:'Quran, Al-Isra’ 17:24' },
+      { t:'Forgiveness for parents and believers', when:'Any time.', ar:"رَبَّنَا ٱغْفِرْ لِى وَلِوَٰلِدَىَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ ٱلْحِسَابُ", tr:'Rabbanagh-fir lī wa liwālidayya wa lil-mu’minīna yauma yaqūmul-ḥisāb.', m:'Our Lord, forgive me, my parents and the believers on the Day the reckoning is established.', ref:'Quran, Ibrahim 14:41' },
+    ]},
+  ];
+
   // ---------------- surahs (ayah counts per the standard Uthmani mushaf) ----------------
   const SURAHS = [
     { n:1, ref:'1', name:'Al-Fatihah', en:'The Opening', ayat:7, note:'Required in every rakaat' },
     { n:255, ref:'2:255', name:'Ayat al-Kursi', en:'Al-Baqarah, verse 255', ayat:1, note:'Often read after prayer', ayah:true },
     { n:36, ref:'36', name:'Yasin', en:'Ya Sin', ayat:83, note:'Commonly read on Thursday nights' },
+    { n:18, ref:'18', name:'Al-Kahf', en:'The Cave', ayat:110, note:'Sunnah to read on Friday' },
     { n:97, ref:'97', name:'Al-Qadr', en:'The Night of Decree', ayat:5 },
     { n:102, ref:'102', name:'At-Takathur', en:'Rivalry in Worldly Increase', ayat:8 },
     { n:103, ref:'103', name:'Al-‘Asr', en:'Time', ayat:3 },
@@ -228,54 +256,58 @@
   css.textContent = `
     .seg{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
     .seg button{flex:1;padding:8px 6px;font-size:14px;white-space:nowrap}
-    .seg button.on{background:#e8c66a;color:#1b1404}
-    .gh{font-size:13px;color:#9fbdb4;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:4px 0 8px}
-    .ty{padding:10px 0;border-bottom:1px solid #1f4a40}
+    .seg button.on{background:var(--acc);color:var(--onacc)}
+    .gh{font-size:13px;color:var(--mut);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:4px 0 8px}
+    .ty{padding:10px 0;border-bottom:1px solid var(--line)}
     .ty:last-child{border-bottom:0}
-    .ty b{font-size:16px} .ty .rk{float:right;font-size:13px;color:#e8c66a;font-weight:700}
-    .ty div{font-size:13px;color:#9fbdb4;margin-top:3px;line-height:1.45}
-    .step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #1f4a40}
+    .ty b{font-size:16px} .ty .rk{float:right;font-size:13px;color:var(--acc);font-weight:700}
+    .ty div{font-size:13px;color:var(--mut);margin-top:3px;line-height:1.45}
+    .step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
     .step:last-child{border-bottom:0}
-    .pose{width:84px;height:84px;flex-shrink:0;background:#0b1f1a;border-radius:14px}
+    .pose{width:84px;height:84px;flex-shrink:0;background:var(--bg);border-radius:14px}
     .step b{font-size:16px;display:block;margin-bottom:4px}
-    .step p{font-size:13px;color:#cfe0da;line-height:1.5}
-    .ar{font-family:"Amiri","Geeza Pro","Traditional Arabic",serif;direction:rtl;text-align:right;font-size:24px;line-height:1.9;color:#eef5f2;margin-top:6px}
-    .tr{font-size:13px;font-style:italic;color:#e8c66a;margin-top:4px;line-height:1.5}
-    .mn{font-size:13px;color:#9fbdb4;margin-top:3px;line-height:1.5}
-    .lnk{background:none;padding:6px 0 0;color:#5fd39a;font-size:13px}
-    .niat{padding:8px 0;border-bottom:1px solid #1f4a40} .niat:last-child{border-bottom:0}
+    .step p{font-size:13px;color:var(--txt2);line-height:1.5}
+    .ar{font-family:"Amiri","Geeza Pro","Traditional Arabic",serif;direction:rtl;text-align:right;font-size:24px;line-height:1.9;color:var(--txt);margin-top:6px}
+    .tr{font-size:13px;font-style:italic;color:var(--acc);margin-top:4px;line-height:1.5}
+    .mn{font-size:13px;color:var(--mut);margin-top:3px;line-height:1.5}
+    .lnk{background:none;padding:6px 0 0;color:var(--ok);font-size:13px}
+    .niat{padding:8px 0;border-bottom:1px solid var(--line)} .niat:last-child{border-bottom:0}
     .niat b{font-size:14px}
-    .wd{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #1f4a40;font-size:14px;line-height:1.45}
+    .wd{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.45}
     .wd:last-child{border-bottom:0}
-    .wd .no{width:24px;height:24px;border-radius:12px;background:#1f4a40;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-    .wd span{color:#9fbdb4}
-    .fard{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;background:#2a4a33;color:#5fd39a;margin-left:6px}
-    .sl{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1f4a40;cursor:pointer}
+    .wd .no{width:24px;height:24px;border-radius:12px;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .wd span{color:var(--mut)}
+    .fard{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;background:var(--hl);color:var(--ok);margin-left:6px}
+    .sl{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
     .sl:last-child{border-bottom:0}
-    .sl .num{width:36px;height:36px;border-radius:10px;background:#1f4a40;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-    .sl .nm{flex:1} .sl .nm b{font-size:16px} .sl .nm div{font-size:12px;color:#9fbdb4}
-    .sl .go{color:#9fbdb4;font-size:20px}
-    .ayah{padding:12px 0;border-bottom:1px solid #1f4a40;border-radius:10px;transition:background .2s}
-    .ayah.playing{background:#2a4a33}
-    .ayah .no{font-size:11px;color:#9fbdb4;font-weight:700}
+    .sl .num{width:36px;height:36px;border-radius:10px;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .sl .nm{flex:1} .sl .nm b{font-size:16px} .sl .nm div{font-size:12px;color:var(--mut)}
+    .sl .go{color:var(--mut);font-size:20px}
+    .ayah{padding:12px 0;border-bottom:1px solid var(--line);border-radius:10px;transition:background .2s}
+    .ayah.playing{background:var(--hl)}
+    .ayah .no{font-size:11px;color:var(--mut);font-weight:700}
     .bism{text-align:center;direction:rtl;font-family:"Amiri","Geeza Pro",serif;font-size:24px;margin:6px 0 4px}
     .ctl{display:flex;gap:8px;margin:10px 0}
     .ctl button{flex:1}
     .seg{flex-wrap:wrap;overflow:visible} .seg button{flex:1 1 auto;padding:8px 10px}
-    .ty.tap{cursor:pointer} .ty.tap:active{background:#1f4a40}
-    .kv{display:flex;gap:10px;padding:6px 0;font-size:14px;line-height:1.45} .kv span{width:64px;flex-shrink:0;color:#9fbdb4;font-size:12px;font-weight:700;text-transform:uppercase;padding-top:2px}
-    .ol{padding-left:20px;font-size:14px;line-height:1.55;color:#cfe0da} .ol li{margin:4px 0}
-    .srcs{margin-top:14px;padding-top:10px;border-top:1px solid #1f4a40;font-size:12px;color:#9fbdb4;line-height:1.5}
-    .srcs b{display:block;margin-bottom:4px;color:#eef5f2} .srcs a{display:block;color:#5fd39a;text-decoration:none;margin:3px 0}
-    .fl{display:block;font-size:13px;color:#9fbdb4;margin:12px 0 6px;font-weight:600}
+    .ty.tap{cursor:pointer} .ty.tap:active{background:var(--line)}
+    .kv{display:flex;gap:10px;padding:6px 0;font-size:14px;line-height:1.45} .kv span{width:64px;flex-shrink:0;color:var(--mut);font-size:12px;font-weight:700;text-transform:uppercase;padding-top:2px}
+    .ol{padding-left:20px;font-size:14px;line-height:1.55;color:var(--txt2)} .ol li{margin:4px 0}
+    .srcs{margin-top:14px;padding-top:10px;border-top:1px solid var(--line);font-size:12px;color:var(--mut);line-height:1.5}
+    .srcs b{display:block;margin-bottom:4px;color:var(--txt)} .srcs a{display:block;color:var(--ok);text-decoration:none;margin:3px 0}
+    .fl{display:block;font-size:13px;color:var(--mut);margin:12px 0 6px;font-weight:600}
     .row2{display:flex;gap:8px} .row2 input{flex:1}
-    input{font:inherit;font-size:16px;width:100%;border:1px solid #1f4a40;border-radius:12px;padding:10px 12px;background:#0b1f1a;color:#eef5f2}
+    input{font:inherit;font-size:16px;width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--txt)}
     .res{margin-top:12px;border-radius:14px;padding:12px;font-size:14px;line-height:1.5}
     .res b{font-size:18px;display:block;margin-bottom:4px} .res p{margin-top:6px}
-    .res.ok{background:#1d3b2a;border:1px solid #2f6b47} .res.ok b{color:#5fd39a}
-    .res.dep{background:#3a3118;border:1px solid #6a5a2d} .res.dep b{color:#e8c66a}
-    .res.no{background:#3a1f1f;border:1px solid #6a2d2d} .res.no b{color:#ffb3b3}
-    .lang{display:flex;gap:6px;margin-top:6px} .lang button{flex:1;padding:6px;font-size:13px} .lang button.on{background:#e8c66a;color:#1b1404}
+    .res.ok{background:rgba(95,211,154,.14);border:1px solid rgba(95,211,154,.45)} .res.ok b{color:var(--ok)}
+    .res.dep{background:rgba(232,198,106,.14);border:1px solid rgba(232,198,106,.45)} .res.dep b{color:var(--acc)}
+    .res.no{background:rgba(255,120,120,.12);border:1px solid rgba(255,120,120,.4)} .res.no b{color:#e06666}
+    .doa{padding:12px 0;border-bottom:1px solid var(--line)} .doa:last-child{border-bottom:0} .doa b{font-size:16px}
+    .ref{font-size:11px;color:var(--mut);margin-top:6px;font-style:normal}
+    .tbtn{width:100%;aspect-ratio:2.2;border-radius:20px;background:var(--hl);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+    .tbtn:active{transform:scale(.98)} .tbtn .tn{font-size:44px;font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums} .tbtn .tp{font-size:16px} .tbtn .tc{font-size:12px;color:var(--mut)}
+    .lang{display:flex;gap:6px;margin-top:6px} .lang button{flex:1;padding:6px;font-size:13px} .lang button.on{background:var(--acc);color:var(--onacc)}
   `;
   document.head.appendChild(css);
   const font = document.createElement('link'); font.rel='stylesheet';
@@ -337,15 +369,35 @@
       ${srcHtml(['basmeih'])}</div>`;
   }
 
+  function doaItem(d){
+    if(d.surah) return `<div class="doa"><b>${d.t}</b><div class="mn">${d.when}</div><button class="lnk" data-s="${d.surah}">Open Ayat al-Kursi with audio ›</button><div class="ref">${d.ref}</div></div>`;
+    return `<div class="doa"><b>${d.t}</b><div class="mn">${d.when}</div><div class="ar">${d.ar}</div><div class="tr">${d.tr}</div><div class="mn">${d.m}</div>${d.ref?`<div class="ref">${d.ref}</div>`:''}</div>`;
+  }
   function vDoa(){
-    return DOA.map(d=>`<div class="card"><div class="gh">${d.t}</div>
-      <div class="kv"><span>When</span><div>${d.when}</div></div>
-      <div class="ar" style="margin-top:8px">${d.ar}</div>
-      <div class="tr">${d.tr}</div><div class="mn">${d.m}</div>
-      ${d.extra?`<div class="gh" style="margin-top:14px">Closing line used in Malaysia</div>
+    const groups = DOA_GROUPS.map(g=>`<div class="card"><div class="gh">${g.h}</div>${g.items.map(doaItem).join('')}
+      ${g.h.startsWith('After prayer')?tasbihHtml():''}</div>`).join('');
+    const year = `<div class="card"><div class="gh">Hijri new year</div>` + DOA.map(d=>`<div class="doa"><b>${d.t}</b>
+      <div class="mn">${d.when}</div>
+      <div class="ar">${d.ar}</div><div class="tr">${d.tr}</div><div class="mn">${d.m}</div>
+      ${d.extra?`<div class="mn" style="margin-top:10px;font-weight:700">Closing line used in Malaysia</div>
         <div class="ar">${d.extra.ar}</div><div class="tr">${d.extra.tr}</div><div class="mn">${d.extra.m}</div>`:''}
-      </div>`).join('') + `<div class="card"><p class="mn">These doa come from the collection Maslakul Akhyar and are recited in Malaysian mosques at the turn of the Hijri year. They are general supplications rather than a fixed sunnah, so you may also pray in your own words. The English meanings are written for this app. The Malaysian closing line follows the Negeri Sembilan Mufti Department’s booklet.</p>
-      ${srcHtml(['nsDoa','nuDoa'])}</div>`;
+      </div>`).join('') + `<p class="mn" style="margin-top:8px">From the collection Maslakul Akhyar, recited in Malaysian mosques at the turn of the Hijri year. They are general supplications rather than a fixed sunnah.</p>${srcHtml(['nsDoa','nuDoa'])}</div>`;
+    return groups + year + `<div class="card"><p class="mn">Hadith and Quran references are given under each doa. The Quranic Arabic is copied from the standard Uthmani text. The short hadith doa are the wording widely taught in Malaysia, typed for this app, so have an ustaz check them before sharing. English meanings are written for this app.</p></div>`;
+  }
+  // ---------------- Tasbih counter ----------------
+  let tas = store.get('tasbih') || {n:0,total:0};
+  function tasbihHtml(){
+    const phase = tas.n<33?'Subḥānallāh':tas.n<66?'Alḥamdulillāh':tas.n<99?'Allāhu akbar':'Lā ilāha illallāh… (once)';
+    return `<div class="tasbih"><div class="gh" style="margin-top:6px">Tasbih counter</div>
+      <button class="tbtn" id="tasBtn"><span class="tn">${tas.n}</span><span class="tp">${phase}</span><span class="tc">${Math.min(tas.n%33||((tas.n>0&&tas.n<100)?33:0),33)} / 33</span></button>
+      <div class="row2" style="margin-top:8px"><button id="tasReset">Reset</button><div class="mn" style="align-self:center">Total today: <b id="tasTot">${tas.total}</b></div></div></div>`;
+  }
+  function wireTasbih(){
+    const b=$('tasBtn'); if(!b) return;
+    b.onclick=()=>{ tas.n = tas.n>=100?1:tas.n+1; tas.total++; store.set('tasbih',tas);
+      try{ document.getElementById('hapLbl').click(); }catch(e){} try{ navigator.vibrate&&navigator.vibrate(tas.n%33===0?[60,40,60]:15); }catch(e){}
+      const v=b.closest('.tasbih'); v.outerHTML=tasbihHtml(); wireTasbih(); };
+    $('tasReset').onclick=()=>{ tas.n=0; store.set('tasbih',tas); const v=$('tasBtn').closest('.tasbih'); v.outerHTML=tasbihHtml(); wireTasbih(); };
   }
 
   // ---------------- Jamak & Qasar checker ----------------
@@ -512,6 +564,7 @@
     const V = {types:vTypes, howto:vHowto, wudhu:vWudhu, rukun:vRukun, doa:vDoa, surahs:vSurahs, travel:vTravel};
     root.innerHTML = seg() + (V[view]||vTypes)();
     if(view==='travel') wireTravel();
+    if(view==='doa') wireTasbih();
   }
   root.addEventListener('click', e => {
     const v = e.target.closest('[data-v]'); if(v){ view = v.dataset.v; render(); window.scrollTo(0,0); return; }
@@ -519,5 +572,6 @@
     const k = e.target.closest('[data-k]'); if(k){ view='sunat'; stopAudio(); root.innerHTML = seg() + vSunat(k.dataset.k); window.scrollTo(0,0); }
   });
   document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopAudio(); });
+  window.GUIDE = { openSurah(ref){ view='surah'; stopAudio(); vSurah(ref); }, openView(v){ view=v; render(); } };
   render();
 })();
