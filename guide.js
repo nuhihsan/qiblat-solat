@@ -136,6 +136,40 @@
       src:['jenazahKKM'] },
   };
 
+  // ---------------- Short doa for specific prayers (shown on each prayer's detail page) ----------------
+  // Quranic Arabic copied from the Uthmani text (api.alquran.cloud). Hadith doa typed for this app.
+  const PRAYER_DOA = {
+    jenazah: [
+      { t:'Takbir 3: doa for the deceased', when:'After the 3rd takbir. For a woman, change -hu to -hā (lahā, warḥamhā, wa ‘āfihā, wa‘fu ‘anhā).', ar:'اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ', tr:'Allāhummaghfir lahū warḥamhu wa ‘āfihī wa‘fu ‘anhu.', m:'O Allah, forgive him, have mercy on him, keep him safe and pardon him.', ref:'Sahih Muslim 963' },
+      { t:'Takbir 4: doa for the deceased and the living', when:'After the 4th takbir, before salam. For a woman: ajrahā, ba‘dahā, wa lahā.', ar:'اللَّهُمَّ لَا تَحْرِمْنَا أَجْرَهُ وَلَا تَفْتِنَّا بَعْدَهُ وَاغْفِرْ لَنَا وَلَهُ', tr:'Allāhumma lā taḥrimnā ajrahū wa lā taftinnā ba‘dahū waghfir lanā wa lahū.', m:'O Allah, do not deprive us of his reward, do not test us after him, and forgive us and him.', ref:'Sunan Abi Dawud 3201' },
+      { t:'If the deceased is a child', when:'At takbir 3, in place of the doa above.', ar:'اللَّهُمَّ اجْعَلْهُ فَرَطًا لِأَبَوَيْهِ وَسَلَفًا وَأَجْرًا', tr:'Allāhummaj‘alhu faraṭan li abawaihi wa salafan wa ajrā.', m:'O Allah, make him a forerunner for his parents, one who goes ahead of them, and a reward.', ref:'Sahih al-Bukhari, Kitab al-Jana’iz (from al-Hasan al-Basri)' },
+    ],
+    witir: [
+      { t:'After Witir', when:'After salam, 3 times. Raise your voice slightly on the 3rd.', ar:'سُبْحَانَ الْمَلِكِ الْقُدُّوسِ', tr:'Subḥānal-Malikil-Quddūs.', m:'Glory be to the King, the Most Holy.', ref:'Sunan Abi Dawud 1430' },
+    ],
+    dhuha: [
+      { t:'Doa Dhuha', when:'After salam. Widely recited in Malaysia. It comes from the kitab I‘anah at-Talibin, not from a hadith.', ar:'اللَّهُمَّ إِنَّ الضُّحَاءَ ضُحَاؤُكَ، وَالْبَهَاءَ بَهَاؤُكَ، وَالْجَمَالَ جَمَالُكَ، وَالْقُوَّةَ قُوَّتُكَ، وَالْقُدْرَةَ قُدْرَتُكَ، وَالْعِصْمَةَ عِصْمَتُكَ. اللَّهُمَّ إِنْ كَانَ رِزْقِي فِي السَّمَاءِ فَأَنْزِلْهُ، وَإِنْ كَانَ فِي الْأَرْضِ فَأَخْرِجْهُ، وَإِنْ كَانَ مُعَسَّرًا فَيَسِّرْهُ، وَإِنْ كَانَ حَرَامًا فَطَهِّرْهُ، وَإِنْ كَانَ بَعِيدًا فَقَرِّبْهُ، بِحَقِّ ضُحَائِكَ وَبَهَائِكَ وَجَمَالِكَ وَقُوَّتِكَ وَقُدْرَتِكَ، آتِنِي مَا آتَيْتَ عِبَادَكَ الصَّالِحِينَ', tr:'Allāhumma innaḍ-ḍuḥā’a ḍuḥā’uk, wal-bahā’a bahā’uk, wal-jamāla jamāluk, wal-quwwata quwwatuk, wal-qudrata qudratuk, wal-‘iṣmata ‘iṣmatuk. Allāhumma in kāna rizqī fis-samā’i fa anzilh, wa in kāna fil-arḍi fa akhrijh, wa in kāna mu‘assaran fa yassirh, wa in kāna ḥarāman fa ṭahhirh, wa in kāna ba‘īdan fa qarribh, biḥaqqi ḍuḥā’ika wa bahā’ika wa jamālika wa quwwatika wa qudratik, ātinī mā ataita ‘ibādakaṣ-ṣāliḥīn.', m:'O Allah, the Dhuha time is Your Dhuha, the splendour is Your splendour, the beauty is Your beauty, the strength is Your strength, the power is Your power, and the protection is Your protection. O Allah, if my provision is in the sky, send it down; if it is in the earth, bring it out; if it is hard, make it easy; if it is unlawful, purify it; if it is far, bring it near. By Your Dhuha, splendour, beauty, strength and power, give me what You give Your righteous servants.', ref:'I‘anah at-Talibin (Syafi‘i fiqh text)' },
+    ],
+    raya: [
+      { t:'Takbir Raya', when:'From sunset on the eve until the prayer starts (Aidilfitri). For Aidiladha, also after each fardhu prayer until Asar on 13 Zulhijjah.', ar:'اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، لَا إِلَهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ', tr:'Allāhu akbar, Allāhu akbar, Allāhu akbar. Lā ilāha illallāhu wallāhu akbar. Allāhu akbar wa lillāhil-ḥamd.', m:'Allah is the Greatest (3 times). There is no god but Allah, and Allah is the Greatest. Allah is the Greatest, and to Allah belongs all praise.', ref:'Practice of the Companions (Musannaf Ibn Abi Shaybah, from Ibn Mas‘ud)' },
+    ],
+    tahiyyat: [
+      { t:'Entering the mosque', when:'Step in with your right foot.', ar:'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ', tr:'Allāhummaftaḥ lī abwāba raḥmatik.', m:'O Allah, open for me the doors of Your mercy.', ref:'Sahih Muslim 713' },
+      { t:'Leaving the mosque', when:'Step out with your left foot.', ar:'اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ', tr:'Allāhumma innī as’aluka min faḍlik.', m:'O Allah, I ask You from Your bounty.', ref:'Sahih Muslim 713' },
+    ],
+    istikharah: [
+      { t:'Doa Istikharah', when:'After salam. At “hādhal-amr” (this matter), name or think of your matter.', ar:'اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ، وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ، وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ، فَإِنَّكَ تَقْدِرُ وَلَا أَقْدِرُ، وَتَعْلَمُ وَلَا أَعْلَمُ، وَأَنْتَ عَلَّامُ الْغُيُوبِ. اللَّهُمَّ إِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الْأَمْرَ خَيْرٌ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي فَاقْدُرْهُ لِي وَيَسِّرْهُ لِي ثُمَّ بَارِكْ لِي فِيهِ، وَإِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الْأَمْرَ شَرٌّ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي فَاصْرِفْهُ عَنِّي وَاصْرِفْنِي عَنْهُ، وَاقْدُرْ لِيَ الْخَيْرَ حَيْثُ كَانَ ثُمَّ أَرْضِنِي بِهِ', tr:'Allāhumma innī astakhīruka bi‘ilmik, wa astaqdiruka biqudratik, wa as’aluka min faḍlikal-‘aẓīm, fa innaka taqdiru wa lā aqdir, wa ta‘lamu wa lā a‘lam, wa anta ‘allāmul-ghuyūb. Allāhumma in kunta ta‘lamu anna hādhal-amra khairun lī fī dīnī wa ma‘āshī wa ‘āqibati amrī faqdurhu lī wa yassirhu lī thumma bārik lī fīh. Wa in kunta ta‘lamu anna hādhal-amra sharrun lī fī dīnī wa ma‘āshī wa ‘āqibati amrī faṣrifhu ‘annī waṣrifnī ‘anh, waqdur liyal-khaira ḥaithu kāna thumma arḍinī bih.', m:'O Allah, I ask You to guide me by Your knowledge, and to give me ability by Your power, and I ask You from Your immense bounty. You are able and I am not; You know and I do not; You are the Knower of the unseen. O Allah, if You know this matter is good for me in my religion, my life and its outcome, decree it for me, make it easy for me, then bless me in it. And if You know this matter is bad for me in my religion, my life and its outcome, turn it away from me and turn me away from it, decree for me what is good wherever it is, then make me content with it.', ref:'Sahih al-Bukhari 1162' },
+    ],
+    hajat: [
+      { t:'Doa Nabi Yunus', when:'After salam, before asking for your need. The Prophet SAW said no Muslim asks with it except that Allah answers him.', ar:'لَّآ إِلَٰهَ إِلَّآ أَنتَ سُبْحَٰنَكَ إِنِّى كُنتُ مِنَ ٱلظَّٰلِمِينَ', tr:'Lā ilāha illā anta subḥānaka innī kuntu minaẓ-ẓālimīn.', m:'There is no god but You. Glory be to You. Indeed, I have been of the wrongdoers.', ref:'Quran, Al-Anbiya’ 21:87; Jami‘ at-Tirmidhi 3505' },
+      { t:'Doa Nabi Musa', when:'When in need of any good.', ar:'رَبِّ إِنِّى لِمَآ أَنزَلْتَ إِلَىَّ مِنْ خَيْرٍۢ فَقِيرٌۭ', tr:'Rabbi innī limā anzalta ilayya min khairin faqīr.', m:'My Lord, I am truly in need of whatever good You send down to me.', ref:'Quran, Al-Qasas 28:24' },
+    ],
+    taubat: [
+      { t:'Doa Nabi Adam', when:'After salam.', ar:'رَبَّنَا ظَلَمْنَآ أَنفُسَنَا وَإِن لَّمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا لَنَكُونَنَّ مِنَ ٱلْخَٰسِرِينَ', tr:'Rabbanā ẓalamnā anfusanā wa il-lam taghfir lanā wa tarḥamnā lanakūnanna minal-khāsirīn.', m:'Our Lord, we have wronged ourselves. If You do not forgive us and have mercy on us, we will surely be among the losers.', ref:'Quran, Al-A‘raf 7:23' },
+      { t:'Short istighfar', when:'Repeat often. The Prophet SAW would say it 100 times in a sitting.', ar:'رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ', tr:'Rabbighfir lī wa tub ‘alayya innaka antat-tawwābur-raḥīm.', m:'My Lord, forgive me and accept my repentance. You are the Accepter of Repentance, the Most Merciful.', ref:'Sunan Abi Dawud 1516, Jami‘ at-Tirmidhi 3434' },
+    ],
+  };
+
   // ---------------- Rukun Islam & Rukun Iman ----------------
   const RUKUN_ISLAM = [
     ['Syahadah','Declaring the two testimonies of faith: there is no god but Allah, and Muhammad is the Messenger of Allah.'],
@@ -188,6 +222,7 @@
       { t:'Before sleeping', when:'Lying down to sleep.', ar:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', tr:'Bismika Allāhumma amūtu wa aḥyā.', m:'In Your name, O Allah, I die and I live.', ref:'Sahih al-Bukhari 6324' },
       { t:'Waking up', when:'On waking.', ar:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', tr:'Alḥamdulillāhil-ladhī aḥyānā ba‘da mā amātanā wa ilaihin-nushūr.', m:'All praise is for Allah, who gave us life after causing us to die, and to Him is the return.', ref:'Sahih al-Bukhari 6324' },
     ]},
+    { h:'Solat Jenazah', items:PRAYER_DOA.jenazah },
     { h:'For parents', items:[
       { t:'Mercy for parents', when:'Any time, especially after prayer.', ar:"رَّبِّ ٱرْحَمْهُمَا كَمَا رَبَّيَانِى صَغِيرًۭا", tr:'Rabbir-ḥamhumā kamā rabbayānī ṣaghīrā.', m:'My Lord, have mercy on them as they raised me when I was small.', ref:'Quran, Al-Isra’ 17:24' },
       { t:'Forgiveness for parents and believers', when:'Any time.', ar:"رَبَّنَا ٱغْفِرْ لِى وَلِوَٰلِدَىَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ ٱلْحِسَابُ", tr:'Rabbanagh-fir lī wa liwālidayya wa lil-mu’minīna yauma yaqūmul-ḥisāb.', m:'Our Lord, forgive me, my parents and the believers on the Day the reckoning is established.', ref:'Quran, Ibrahim 14:41' },
@@ -337,6 +372,7 @@
       <ol class="ol">${s.how.map(h=>`<li>${h}</li>`).join('')}</ol>
       <div class="gh" style="margin-top:14px">Niat (said softly; the intention is in the heart)</div>
       ${s.niat.map(n=>`<div class="tr">${n}</div>`).join('')}
+      ${PRAYER_DOA[key]?`<div class="gh" style="margin-top:14px">Doa</div>${PRAYER_DOA[key].map(doaItem).join('')}`:''}
       ${key!=='jenazah'?'<button class="lnk" data-v="howto">See the basic 2-rakaat steps ›</button>':''}
       ${s.src?srcHtml(s.src):UNVERIFIED}</div>`;
   }

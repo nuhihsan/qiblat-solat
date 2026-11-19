@@ -1,6 +1,6 @@
 // Offline support: the app shell is served from cache and refreshed in the background.
 // Prayer-time API calls go to the network first and fall back to the last saved copy.
-const CACHE = 'prayer-app-v14';
+const CACHE = 'prayer-app-v15';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-512.png', './guide.js', './extras.js'];
 
 self.addEventListener('install', e => {
