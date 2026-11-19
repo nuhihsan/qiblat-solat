@@ -8,4 +8,5 @@ Personal web app for Malaysia: JAKIM prayer times by GPS zone, Qibla compass, Is
 
 - Prayer times: JAKIM e-Solat via https://api.waktusolat.app
 - Offline fallback: local calculation (Subuh 20°, Isyak 18°, Asar Syafie, +2 min ihtiyat)
+- Prayer notifications: Web Push from a Cloudflare Worker (see worker/README.md)
 - Islamic events calendar (subscribe on iPhone): webcal://nuhihsan.github.io/qiblat-solat/islamic-events.ics
