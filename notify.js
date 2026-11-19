@@ -13,7 +13,13 @@
     ['asr','Asr',true,true], ['maghrib','Maghrib',true,true], ['isha','Isha',true,true],
   ];
   const DEFAULT = { at:['fajr','dhuhr','asr','maghrib','isha'], pre:['fajr','syuruk','dhuhr','asr','maghrib','isha'], min:10 };
-  const prefs = () => Object.assign({}, DEFAULT, store.get('nfPrefs') || {});
+  const RAM_DEFAULT = { sahur:45, imsak:true, iftar:true };
+  const prefs = () => {
+    const p = Object.assign({}, DEFAULT, store.get('nfPrefs') || {});
+    p.ram = Object.assign({}, RAM_DEFAULT, p.ram || {});
+    p.hadj = +(store.get('hijriAdj') || 0);
+    return p;
+  };
 
   const css = document.createElement('style');
   css.textContent = `
@@ -39,11 +45,21 @@
   const panel = $('setPanel');
   const doneRow = $('setDone').parentNode;
   const box = document.createElement('div');
-  box.innerHTML = `<label style="margin-top:14px">Prayer notifications</label><div class="nf" id="nfBody"></div>
+  box.innerHTML = `<label style="margin-top:14px">Hijri date adjustment</label>
+    <div class="segrow" id="hadjSeg"><button data-v="-1">−1 day</button><button data-v="0">As JAKIM</button><button data-v="1">+1 day</button></div>
+    <div class="stat" style="font-size:12px;color:var(--mut);margin-top:6px">Use this if the Hijri date your state announced differs from JAKIM's. It also moves Ramadan mode and Ramadan alerts.</div>
+    <label style="margin-top:14px">Prayer notifications</label><div class="nf" id="nfBody"></div>
     <div class="about"><span>Version <b id="verNo"></b></span><button id="pnBtn" style="padding:7px 12px;font-size:13px">Patch notes</button></div>
     <div class="pn hide" id="pnList"></div>`;
   panel.insertBefore(box, doneRow);
   $('verNo').textContent = window.APP_VERSION || '';
+  function drawHadj(){ const v = String(+(store.get('hijriAdj') || 0)); document.querySelectorAll('#hadjSeg button').forEach(b=>b.classList.toggle('on', b.dataset.v===v)); }
+  document.querySelectorAll('#hadjSeg button').forEach(b => b.onclick = () => {
+    store.set('hijriAdj', +b.dataset.v); drawHadj();
+    if(window.APP && APP.reload) APP.reload();
+    if(store.get('nfOn')) save();
+  });
+  drawHadj();
   $('pnBtn').onclick = () => { const l = $('pnList'); if(!l.innerHTML) l.innerHTML = notesHtml(window.PATCH_NOTES || []); l.classList.toggle('hide'); };
 
   function notesHtml(list){
@@ -95,6 +111,7 @@
     const zone = currentZone(); if(!zone) throw new Error('Open the Today tab once so the app can find your zone.');
     const sub = await getSub(true);
     await api('/subscribe', { sub: sub.toJSON(), zone, prefs: prefs() });
+    sendPrayed();
     store.set('nfZone', zone); store.set('nfSynced', Date.now());
   }
 
@@ -125,10 +142,17 @@
       <div style="margin-top:8px">${ROWS.map(([k,l,at,pre])=>`<div class="nfrow"><span>${l}</span>
         <button class="chip ${at?'':'na'} ${p.at.includes(k)?'on':''}" data-k="${k}" data-t="at">On time</button>
         <button class="chip ${pre?'':'na'} ${p.pre.includes(k)?'on':''}" data-k="${k}" data-t="pre">Before</button></div>`).join('')}</div>
+      <label style="margin-top:14px">Ramadan alerts (only during Ramadan)</label>
+      <div class="nfrow" style="border:0;padding-top:0"><span>Sahur wake-up, before Imsak</span></div>
+      <div class="segrow" id="nfSahur">${[[0,'Off'],[30,'30m'],[45,'45m'],[60,'1h'],[90,'1h 30m']].map(([m,l])=>`<button data-m="${m}" class="${p.ram.sahur===m?'on':''}">${l}</button>`).join('')}</div>
+      <div class="nfrow" style="margin-top:8px"><span>Imsak (stop eating)</span><button class="chip ${p.ram.imsak?'on':''}" data-r="imsak">${p.ram.imsak?'On':'Off'}</button></div>
+      <div class="nfrow"><span>Iftar (replaces the Maghrib alert)</span><button class="chip ${p.ram.iftar?'on':''}" data-r="iftar">${p.ram.iftar?'On':'Off'}</button></div>
       <div class="row"><button id="nfTest">Send test</button><button id="nfOff">Turn off</button></div>
       ${msg?`<div class="stat">${esc(msg)}</div>`:''}`;
     el.querySelectorAll('#nfMin button').forEach(b => b.onclick = () => { store.set('nfPrefs', Object.assign(p, {min:+b.dataset.m})); save(); });
-    el.querySelectorAll('.chip:not(.na)').forEach(b => b.onclick = () => {
+    el.querySelectorAll('#nfSahur button').forEach(b => b.onclick = () => { p.ram.sahur = +b.dataset.m; store.set('nfPrefs', p); save(); });
+    el.querySelectorAll('.chip[data-r]').forEach(b => b.onclick = () => { p.ram[b.dataset.r] = !p.ram[b.dataset.r]; store.set('nfPrefs', p); save(); });
+    el.querySelectorAll('.chip[data-t]:not(.na)').forEach(b => b.onclick = () => {
       const list = p[b.dataset.t], k = b.dataset.k;
       p[b.dataset.t] = list.includes(k) ? list.filter(x=>x!==k) : [...list, k];
       store.set('nfPrefs', p); save();
@@ -183,6 +207,17 @@
     if(zone && (zone !== store.get('nfZone') || stale)){ try { await sync(); draw(); } catch(e){} }
   });
 
-  $('setBtn').addEventListener('click', () => { msg = ''; draw(); });
+  // prayer tracker -> Worker (a ticked Fajr skips the "Fajr ends" reminder)
+  async function sendPrayed(){
+    try {
+      if(!store.get('nfOn') || !supported()) return;
+      const t = window.APP && APP.prayedToday && APP.prayedToday(); if(!t) return;
+      const sub = await getSub(false); if(!sub) return;
+      await api('/prayed', { endpoint: sub.endpoint, date: t.date, keys: t.keys });
+    } catch(e){}
+  }
+  window.APP = window.APP || {}; window.APP.sendPrayed = sendPrayed;
+
+  $('setBtn').addEventListener('click', () => { msg = ''; draw(); drawHadj(); });
   draw();
 })();

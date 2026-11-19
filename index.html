@@ -176,6 +176,7 @@
       <div class="at" id="nextAt"></div>
     </div>
     <div class="card tl hide" id="timeline"></div>
+    <div class="card trk hide" id="trackCard"></div>
     <div class="card fri hide" id="friCard"></div>
     <div class="card"><ul class="times" id="times"></ul></div>
     <div class="card" id="mosqueCard"></div>
@@ -363,8 +364,20 @@ window.APP = window.APP || {};
     if(!p) return null;
     const o = {}; MAIN.forEach(([k])=>o[k]=toDate(p[k]));
     o.imsak = toDate(p.imsak); o.dhuha = toDate(p.dhuha);
-    o.hijri = p.hijri || '';
+    o.hijri = adjHijri(data, day, p.hijri || '');
     return o;
+  }
+  // Hijri date adjustment (Settings): show the Hijri date of the day `adj` days away, as JAKIM lists it
+  function adjHijri(data, day, h){
+    const adj = +(store.get('hijriAdj') || 0);
+    if(!adj || !h) return h;
+    const q = data.prayers.find(x=>+x.day===day+adj);
+    if(q && q.hijri) return q.hijri;
+    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(h); if(!m) return h;
+    let [y,mo,d] = [+m[1],+m[2],+m[3]+adj];
+    if(d<1){ mo--; d=30; if(mo<1){ mo=12; y--; } }
+    else if(d>30){ mo++; d=1; if(mo>12){ mo=1; y++; } }
+    return `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
   }
 
   // ---------- render: today ----------
@@ -677,6 +690,7 @@ window.APP = window.APP || {};
     if(t==='month'){ const r=$('mBody').querySelector('tr.today'); if(r) r.scrollIntoView({block:'center'}); }
   }
   window.APP.showTab = showTab;
+  window.APP.reload = () => start();
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
   $('compassBtn').addEventListener('click',enableCompass);
   $('refresh').addEventListener('click',()=>start());
@@ -696,5 +710,6 @@ window.APP = window.APP || {};
 <script src="extras.js"></script>
 <script src="notes.js"></script>
 <script src="notify.js"></script>
+<script src="tracker.js"></script>
 </body>
 </html>

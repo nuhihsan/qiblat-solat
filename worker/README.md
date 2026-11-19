@@ -3,7 +3,8 @@
 `prayer-push-worker.js` runs on Cloudflare Workers (free plan). Every minute it checks JAKIM prayer times for each zone that has a subscribed phone, and sends a Web Push notification:
 
 - at each prayer time the user switched on, and
-- a few minutes before (5, 10, 15 or 20), including "Fajr ends" before sunrise.
+- a few minutes before (5, 10, 15 or 20), including "Fajr ends" before sunrise (skipped if Fajr is ticked in the prayer tracker), and
+- during Ramadan, a Sahur wake-up, an Imsak alert and an Iftar alert. Ramadan follows JAKIM's Hijri date, moved by the user's Hijri adjustment.
 
 The D1 database `qiblat-solat` and its tables already exist. The Web Push signing key is made automatically the first time and kept in D1, so there are no secrets to set.
 
@@ -19,7 +20,7 @@ The app expects the Worker at `https://qiblat-solat-push.nuh-ihsan.workers.dev` 
 ## Tables
 
 ```sql
-CREATE TABLE IF NOT EXISTS subs (endpoint TEXT PRIMARY KEY, p256dh TEXT NOT NULL, auth TEXT NOT NULL, zone TEXT NOT NULL, prefs TEXT NOT NULL, created INTEGER NOT NULL, updated INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS subs (endpoint TEXT PRIMARY KEY, p256dh TEXT NOT NULL, auth TEXT NOT NULL, zone TEXT NOT NULL, prefs TEXT NOT NULL, created INTEGER NOT NULL, updated INTEGER NOT NULL, prayed TEXT);
 CREATE INDEX IF NOT EXISTS subs_zone ON subs(zone);
 CREATE TABLE IF NOT EXISTS times (zone TEXT NOT NULL, ym TEXT NOT NULL, data TEXT NOT NULL, fetched INTEGER NOT NULL, PRIMARY KEY (zone, ym));
 CREATE TABLE IF NOT EXISTS app_kv (k TEXT PRIMARY KEY, v TEXT NOT NULL);

@@ -1,7 +1,13 @@
 // App version and patch notes.
 // Every update: bump APP_VERSION and add an entry at the TOP of PATCH_NOTES (see CLAUDE.md).
-window.APP_VERSION = '2.2';
+window.APP_VERSION = '2.3';
 window.PATCH_NOTES = [
+  { v:'2.3', date:'2026-11-19', items:[
+    'Prayer tracker on the Today tab: tick each prayer once its time starts, and see the last 7 days and your streak.',
+    'If you tick Fajr, you will not get the "Fajr ends" reminder that day.',
+    'Ramadan alerts: a Sahur wake-up before Imsak, an Imsak alert, and an Iftar alert at Maghrib. Turn each on or off in Settings.',
+    'Hijri date adjustment in Settings: move the date by one day if your state announced a different date from JAKIM. Ramadan mode and Ramadan alerts follow it.',
+  ]},
   { v:'2.2', date:'2026-11-19', items:[
     'Prayer notifications: get an alert at each prayer time, even with the app closed.',
     'Reminder before each prayer: choose 5, 10, 15 or 20 minutes before.',

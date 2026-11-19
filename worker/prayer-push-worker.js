@@ -12,17 +12,24 @@
 //   POST /subscribe      { sub, zone, prefs }   save or update this phone
 //   POST /unsubscribe    { endpoint }
 //   POST /test           { endpoint }  send a test notification to this phone only
+//   POST /prayed         { endpoint, date, keys }  prayers ticked today (Fajr ticked = no "Fajr ends" reminder)
 //
-// prefs = { at: ["fajr","dhuhr",...], pre: ["fajr","syuruk",...], min: 10 }
-//   at   prayers to notify at the exact time
-//   pre  prayers to remind before (syuruk = "Fajr time is ending")
-//   min  minutes before (5, 10, 15 or 20)
+// prefs = { at: ["fajr","dhuhr",...], pre: ["fajr","syuruk",...], min: 10,
+//           ram: { sahur: 45, imsak: true, iftar: true }, hadj: 0 }
+//   at    prayers to notify at the exact time
+//   pre   prayers to remind before (syuruk = "Fajr time is ending")
+//   min   minutes before (5, 10, 15 or 20)
+//   ram   Ramadan only: Sahur wake-up minutes before Imsak (0 = off), Imsak alert, Iftar alert
+//   hadj  Hijri date adjustment in days (-1, 0 or +1), used to tell when Ramadan starts and ends
+//
+// Database migration for older installs: ALTER TABLE subs ADD COLUMN prayed TEXT
 
 const ALLOWED_ORIGINS = ["https://nuhihsan.github.io"];
 const APP_URL = "https://nuhihsan.github.io/qiblat-solat/";
 const API = "https://api.waktusolat.app";
 const TZ = "Asia/Kuala_Lumpur";
 const KEYS = ["fajr", "syuruk", "dhuhr", "asr", "maghrib", "isha"];
+const ALL_TIMES = ["imsak", ...KEYS];
 const NAMES = { fajr: "Fajr", syuruk: "Sunrise", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" };
 const PUSH_HOSTS = /^https:\/\/([a-z0-9-]+\.)*(fcm\.googleapis\.com|android\.googleapis\.com|push\.services\.mozilla\.com|push\.apple\.com|notify\.windows\.com)\//i;
 
@@ -56,6 +63,13 @@ export default {
         const r = await sendPush(await vapidKeys(env), sub, { title: "Notifications are on", body: `You'll get prayer alerts for zone ${sub.zone}.`, tag: "test" }, 600);
         return reply(r.ok ? 200 : 502, { ok: r.ok, status: r.status });
       }
+      if (path === "/prayed") {
+        const date = String(b.date || "");
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return reply(400, { ok: false, error: "date" });
+        const keys = Array.isArray(b.keys) ? b.keys.filter(k => KEYS.includes(k)) : [];
+        await env.DB.prepare("UPDATE subs SET prayed = ? WHERE endpoint = ?").bind(JSON.stringify({ date, keys }), String(b.endpoint || "")).run();
+        return reply(200, { ok: true });
+      }
       return reply(404, { ok: false, error: "not found" });
     } catch (e) {
       return reply(500, { ok: false, error: String(e && e.message || e) });
@@ -72,7 +86,10 @@ function cleanPrefs(p) {
   p = p || {};
   const pick = a => Array.isArray(a) ? [...new Set(a.filter(k => KEYS.includes(k)))] : [];
   const min = [5, 10, 15, 20].includes(+p.min) ? +p.min : 10;
-  return { at: pick(p.at), pre: pick(p.pre), min };
+  const r = p.ram || {};
+  const ram = { sahur: [0, 30, 45, 60, 90].includes(+r.sahur) ? +r.sahur : 45, imsak: r.imsak !== false, iftar: r.iftar !== false };
+  const hadj = [-1, 0, 1].includes(+p.hadj) ? +p.hadj : 0;
+  return { at: pick(p.at), pre: pick(p.pre), min, ram, hadj };
 }
 async function subscribe(b, env, reply) {
   const s = b.sub || {}, keys = s.keys || {};
@@ -111,12 +128,23 @@ async function monthData(env, zone, y, m) {
   return row ? JSON.parse(row.data) : null; // keep using the older copy if the fetch failed
 }
 
-function messagesFor(prefs, day, isFriday, last, now) {
+function messagesFor(prefs, day, isFriday, last, now, opts = {}) {
   const out = [];
   const inWin = t => t > last && t <= now;
+  const ramadan = !!opts.ramadan, fajrDone = !!opts.fajrDone;
+  if (ramadan) {
+    const im = +day.imsak || (+day.fajr - 600);
+    if (prefs.ram.sahur && inWin(im - prefs.ram.sahur * 60))
+      out.push({ title: "Time for Sahur", body: `Imsak is at ${fmt(im)}, ${prefs.ram.sahur} minutes from now.`, tag: "ram-sahur", urgent: true });
+    if (prefs.ram.imsak && inWin(im))
+      out.push({ title: "Imsak", body: `Stop eating and drinking. Fajr is at ${fmt(+day.fajr)}.`, tag: "ram-imsak", urgent: true });
+    if (prefs.ram.iftar && inWin(+day.maghrib))
+      out.push({ title: "Time to break your fast", body: `Maghrib began at ${fmt(+day.maghrib)}.`, tag: "at-maghrib", urgent: true });
+  }
   for (const k of prefs.at) {
     const t = +day[k];
     if (!t || !inWin(t)) continue;
+    if (ramadan && k === "maghrib" && prefs.ram.iftar) continue; // the Iftar alert covers it
     const name = (k === "dhuhr" && isFriday) ? "Dhuhr (Jumaat)" : NAMES[k];
     out.push(k === "syuruk"
       ? { title: "Sunrise", body: `Fajr time has ended (${fmt(t)}).`, tag: `at-${k}` }
@@ -125,6 +153,8 @@ function messagesFor(prefs, day, isFriday, last, now) {
   for (const k of prefs.pre) {
     const t = +day[k];
     if (!t || !inWin(t - prefs.min * 60)) continue;
+    if (k === "syuruk" && fajrDone) continue;
+    if (k === "fajr" && ramadan && prefs.ram.imsak && Math.abs((t - prefs.min * 60) - (+day.imsak || 0)) < 120) continue; // same moment as the Imsak alert
     const name = (k === "dhuhr" && isFriday) ? "Dhuhr (Jumaat)" : NAMES[k];
     out.push(k === "syuruk"
       ? { title: `Fajr ends in ${prefs.min} minutes`, body: `Sunrise is at ${fmt(t)}. Pray Fajr now if you haven't.`, tag: `pre-${k}`, urgent: true }
@@ -143,19 +173,24 @@ async function tick(env, now) {
   const zones = (await env.DB.prepare("SELECT DISTINCT zone FROM subs").all()).results || [];
   if (!zones.length) return;
   const { y, m, d, wd } = myParts(now);
+  const ymd = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
   let vapid = null;
   for (const { zone } of zones) {
     const prayers = await monthData(env, zone, y, m);
     if (!prayers) continue;
     const day = prayers.find(p => +p.day === d);
     if (!day) continue;
-    // quick skip: nothing within the next 20 minutes of this window
-    const soon = KEYS.some(k => { const t = +day[k]; return t > last && t - 20 * 60 <= now; });
+    // quick skip: nothing within the next 95 minutes of this window (covers a 90-minute Sahur alert)
+    const soon = ALL_TIMES.some(k => { const t = +day[k]; return t > last && t - 95 * 60 <= now; });
     if (!soon) continue;
+    const ramCache = {};
     const subs = (await env.DB.prepare("SELECT * FROM subs WHERE zone = ?").bind(zone).all()).results || [];
     for (const sub of subs) {
       let prefs; try { prefs = cleanPrefs(JSON.parse(sub.prefs)); } catch (e) { continue; }
-      const msgs = messagesFor(prefs, day, wd === "Fri", last, now);
+      if (!(prefs.hadj in ramCache)) ramCache[prefs.hadj] = await isRamadan(env, zone, now, prefs.hadj, day);
+      let fajrDone = false;
+      try { const pr = JSON.parse(sub.prayed || "null"); fajrDone = !!(pr && pr.date === ymd && pr.keys.includes("fajr")); } catch (e) {}
+      const msgs = messagesFor(prefs, day, wd === "Fri", last, now, { ramadan: ramCache[prefs.hadj], fajrDone });
       for (const msg of msgs) {
         vapid = vapid || await vapidKeys(env);
         try {
@@ -165,6 +200,19 @@ async function tick(env, now) {
       }
     }
   }
+}
+
+// Ramadan by JAKIM's Hijri date, moved by the user's adjustment (the Hijri date of the day `hadj` days away)
+async function isRamadan(env, zone, now, hadj, day) {
+  let row = day;
+  if (hadj) {
+    const q = myParts(now + hadj * 86400);
+    const prayers = await monthData(env, zone, q.y, q.m);
+    row = prayers && prayers.find(p => +p.day === q.d);
+    if (!row) return false;
+  }
+  const h = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(row.hijri || "");
+  return !!h && +h[2] === 9;
 }
 
 // ---------- Web Push (RFC 8291 + VAPID). The signing key is made once and kept in D1. ----------

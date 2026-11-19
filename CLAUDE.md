@@ -16,7 +16,7 @@ Every change that ships to users must, in the same commit:
 ## App basics
 
 - Plain HTML, CSS and JavaScript, no build step. Hosted on GitHub Pages from `main`.
-- `index.html` (main app), `guide.js` (Guide tab), `extras.js` (appearance, timeline, Friday mode and more), `notify.js` (prayer notifications, What's new), `notes.js` (version and patch notes).
+- `index.html` (main app), `guide.js` (Guide tab), `extras.js` (appearance, timeline, Friday mode and more), `notify.js` (prayer notifications, Hijri adjustment, What's new), `tracker.js` (prayer tracker), `notes.js` (version and patch notes).
 - Interface in English. Islamic content should come from JAKIM or Malaysian state Mufti sources where possible; flag anything without an official source for checking by an ustaz.
 - Saved data lives in `localStorage`. Do not change saved data shapes without handling the old shape.
 - Phone first: check layouts at about 390 px wide.
